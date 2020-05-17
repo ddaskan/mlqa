@@ -153,12 +153,10 @@ class TestCheckers(unittest.TestCase):
 
         with self.assertLogs(self.logger_name, level='INFO') as log:
             func(pd.Series(range(1, 100)), [10, 90], [5, 95], logger=self.logger)
-        self.assertEqual(
-            log.output,
+        self.assertCountEqual(
+            log.output[:1]+log.output[2:], # stats dict is unordered so ignored
             [
                 'INFO:test_mlqa:predictions QA initiated with warn_range [10, 90]',
-                "INFO:test_mlqa:predictions statistics: {'count': 99.0, 'mean': 50.0, "
-                "'std': 28.72281, 'min': 1.0, '25%': 25.5, '50%': 50.0, '75%': 74.5, 'max': 99.0}",
                 'WARNING:test_mlqa:min value (i.e. 1) is not in the range of [10, None]',
                 'WARNING:test_mlqa:max value (i.e. 99) is not in the range of [None, 90]',
                 'ERROR:test_mlqa:min value (i.e. 1) is not in the range of [5, None]',
