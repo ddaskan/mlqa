@@ -2,6 +2,7 @@ import unittest
 import sys
 import logging
 import pandas as pd
+import numpy as np
 sys.path.append('../')
 from mlqa import checkers
 
@@ -18,6 +19,110 @@ class TestCheckers(unittest.TestCase):
         cls.logger_name = 'test_mlqa'
         logging.basicConfig(format='%(asctime)-15s %(message)s', level='DEBUG')
         cls.logger = logging.getLogger(cls.logger_name)
+
+    def test_qa_missing_values(self):
+        func = checkers.qa_missing_values
+        df_copy = self.df.copy()
+        df_copy.loc[df_copy.Sex.sample(n=10).index, 'Sex'] = None
+        df_copy.loc[df_copy.Fare.sample(n=50).index, 'Fare'] = np.nan
+        df_copy.loc[df_copy.Pclass.sample(n=100).index, 'Pclass'] = np.NaN
+
+        self.assertRaises(TypeError, func)
+
+        with self.assertLogs(self.logger_name, level='INFO') as log:
+            func(df_copy, n=5, logger=self.logger)
+        self.assertCountEqual(
+            log.output,
+            [
+                'WARNING:test_mlqa:unexpected na count (i.e. 10) for Sex, '
+                'must be in [None, 5.5]',
+                'WARNING:test_mlqa:unexpected na count (i.e. 50) for Fare, '
+                'must be in [None, 5.5]',
+                'WARNING:test_mlqa:unexpected na count (i.e. 100) for Pclass, '
+                'must be in [None, 5.5]',
+            ])
+
+        self.assertTrue(func(df_copy, n=0, limit=[True, False]))
+        self.assertTrue(
+            func(df_copy[['Sex', 'Fare', 'Pclass']], n=5, limit=[True, False]))
+        self.assertTrue(func(df_copy, n=100, limit=[False, True]))
+
+        self.assertFalse(func(df_copy, n=90, limit=[False, True]))
+        self.assertFalse(
+            func(df_copy[['Sex', 'Fare']], n=20, limit=[True, False]))
+
+    def test_qa_missing_values_1d(self):
+        func = checkers.qa_missing_values_1d
+
+        self.assertRaises(TypeError, func)
+        self.assertRaises(
+            TypeError, 
+            func, 
+            **{'array':range(100), 'n':None, 'frac':None})
+        self.assertRaises(ValueError, func, **{'array':range(100), 'frac':1.0})
+        self.assertRaises(ValueError, func, **{'array':range(100), 'frac':2.0})
+        self.assertRaises(
+            ValueError, 
+            func, 
+            **{'array':range(100), 'frac':.2, 'limit':[False, False]})
+        self.assertRaises(
+            ValueError, 
+            func, 
+            **{'array':range(100), 'frac':.2, 'limit':[True]})
+        self.assertRaises(
+            TypeError, 
+            func, 
+            **{'array':range(100), 'frac':.1, 'name':list()})
+
+        list_20na = pd.Series(range(1,101))
+        list_20na.loc[list_20na.sample(n=20).index] = None
+        with self.assertLogs(self.logger_name, level='INFO') as log:
+            func(list_20na, n=5, logger=self.logger)
+            func(list_20na, n=10, logger=self.logger, name='this one')
+            func(list_20na, n=10, logger=self.logger, log_level=40)
+            func(list_20na, n=10, limit=[True, True], logger=self.logger)
+        self.assertEqual(
+            log.output,
+            [
+                'WARNING:test_mlqa:unexpected na count (i.e. 20), '
+                'must be in [None, 5.5]',
+                'WARNING:test_mlqa:unexpected na count (i.e. 20) for this one, '
+                'must be in [None, 11.0]',
+                'ERROR:test_mlqa:unexpected na count (i.e. 20), '
+                'must be in [None, 11.0]',
+                'WARNING:test_mlqa:unexpected na count (i.e. 20), '
+                'must be in [9.0, 11.0]',
+            ])
+
+        for na_val in [None, np.nan, np.NaN]:
+            with self.subTest(na_val=na_val):
+                list_10na = pd.Series(range(1,101))
+                list_10na.loc[list_10na.sample(n=10).index] = na_val
+                list_10na = list_10na.tolist()
+                
+                self.assertTrue(
+                    func(list_10na, n=10, threshold=.1, limit=[False, True]))
+                self.assertTrue(
+                    func(list_10na, n=10, threshold=.0, limit=[False, True]))
+                self.assertTrue(
+                    func(list_10na, frac=.1, threshold=.1, limit=[False, True]))
+                self.assertTrue(
+                    func(list_10na, n=50, threshold=.1, limit=[False, True]))
+                self.assertTrue(
+                    func(list_10na, frac=.5, threshold=.1, limit=[False, True]))
+                self.assertTrue(
+                    func(list_10na, n=5, threshold=.1, limit=[True, False]))
+
+                self.assertFalse(
+                    func(list_10na, n=5, threshold=.1, limit=[False, True]))
+                self.assertFalse(
+                    func(list_10na, frac=.01, threshold=.1, limit=[False, True]))
+                self.assertFalse(
+                    func(list_10na, n=50, threshold=.1, limit=[True, True]))
+                self.assertFalse(
+                    func(list_10na, frac=.5, threshold=.1, limit=[True, True]))
+                self.assertFalse(
+                    func(list_10na, frac=.5, threshold=.1, limit=[True, False]))
 
     def test_qa_df_set(self):
         func = checkers.qa_df_set
@@ -145,14 +250,13 @@ class TestCheckers(unittest.TestCase):
         func = checkers.qa_preds
 
         self.assertRaises(TypeError, func)
-        self.assertRaises(TypeError, func, *[list(), [1, 5], [0, 10]])
-        self.assertRaises(ValueError, func, *[pd.Series(range(2, 4)), [1, -5], [0, 10]])
-        self.assertRaises(ValueError, func, *[pd.Series(range(2, 4)), [1, 5], [2, 10]])
-        self.assertRaises(ValueError, func, *[pd.Series(range(2, 4)), [1, 5], [0, 4]])
-        self.assertRaises(TypeError, func, *[pd.Series(range(1, 100)), [None, 190]])
+        self.assertRaises(ValueError, func, *[range(2, 4), [1, -5], [0, 10]])
+        self.assertRaises(ValueError, func, *[range(2, 4), [1, 5], [2, 10]])
+        self.assertRaises(ValueError, func, *[range(2, 4), [1, 5], [0, 4]])
+        self.assertRaises(TypeError, func, *[range(1, 100), [None, 190]])
 
         with self.assertLogs(self.logger_name, level='INFO') as log:
-            func(pd.Series(range(1, 100)), [10, 90], [5, 95], logger=self.logger)
+            func(range(1, 100), [10, 90], [5, 95], logger=self.logger)
         self.assertCountEqual(
             log.output[:1]+log.output[2:], # stats dict is unordered so ignored
             [
@@ -164,12 +268,12 @@ class TestCheckers(unittest.TestCase):
                 'INFO:test_mlqa:predictions QA done with warn_range [10, 90]'
             ])
 
-        self.assertTrue(func(pd.Series(range(1, 100)), [-1, 190]))
-        self.assertTrue(func(pd.Series(range(1, 100)), [10, 90], [0, 100]))
+        self.assertTrue(func(range(1, 100), [-1, 190]))
+        self.assertTrue(func(range(1, 100), [10, 90], [0, 100]))
 
-        self.assertFalse(func(pd.Series(range(1, 100)), [10, 190]))
-        self.assertFalse(func(pd.Series(range(1, 100)), [10, 90]))
-        self.assertFalse(func(pd.Series(range(1, 100)), [10, 90], [0, 98]))
+        self.assertFalse(func(range(1, 100), [10, 190]))
+        self.assertFalse(func(range(1, 100), [10, 90]))
+        self.assertFalse(func(range(1, 100), [10, 90], [0, 98]))
 
     def test_qa_category_distribution(self):
         func = checkers.qa_category_distribution_on_value

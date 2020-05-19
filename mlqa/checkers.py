@@ -4,6 +4,85 @@ This script includes indivdual QA functions for the module.
 from itertools import combinations
 import pandas as pd
 
+def qa_missing_values(
+        data, n=None, frac=None, threshold=.1, limit=[False, True], 
+        logger=None, log_level=30):
+    '''
+    Wrapper for `qa_missing_values_1d`
+    '''
+    if isinstance(data, pd.DataFrame):
+        qa_results = []
+        for col in data.columns:
+            result = qa_missing_values_1d(
+                data[col], n=n, frac=frac, threshold=threshold, limit=limit, 
+                logger=logger, log_level=log_level, name=col)
+            qa_results.append(result)
+        return all(qa_results)
+    else:
+        iter(data)
+        return qa_missing_values_1d(
+            data, n=n, frac=frac, threshold=threshold, limit=limit, 
+            logger=logger, log_level=log_level)
+
+def qa_missing_values_1d(
+        array, n=None, frac=None, threshold=.1, limit=[False, True], 
+        logger=None, log_level=30, name=None):
+    '''
+    QA check for missing values of 1D array.
+
+    Args:
+        array: array, shape (n_samples, 1)
+        n: int or None, expected missing value count
+        frac: float or None, expected missing value percentage
+        threshold: float, percentage threshold for upper or lower limit
+        limit: list of bool, which side of na limit to check
+        logger: Python logging object or None
+        log_level: int,
+            https://docs.python.org/3/library/logging.html#logging-levels
+        name: str, optional array name for logger
+
+    Returns:
+        bool, is QA passed or not
+    '''
+    if n is None and frac is None:
+        raise TypeError('`n` or `frac` must be given')
+    if frac is not None:
+        if not (0 < frac < 1):
+            raise ValueError('`frac` must be between 0 and 1')
+    if not (len(limit) == 2 and any(limit)):
+        raise ValueError('`limit` not look right')
+    if not (isinstance(name, str) or name is None):
+        raise TypeError('`name` not look right')
+
+    array_copy = pd.Series(array).copy()
+    array_len = len(array_copy)
+    actual = array_copy.isna().sum()
+
+    if n is not None:
+        expected = int(n)
+    else:
+        expected = int(array_len*frac)
+
+    if all(limit):
+        result = expected*(1-threshold) <= actual <= expected*(1+threshold)
+        rng = [expected*(1-threshold), expected*(1+threshold)]
+    elif limit[0]:
+        result = expected*(1-threshold) <= actual
+        rng = [expected*(1-threshold), None]
+    elif limit[1]:
+        result = actual <= expected*(1+threshold)
+        rng = [None, expected*(1+threshold)]
+
+    if not result:
+        if logger:
+            msg = 'unexpected na count (i.e. {})'.format(actual)
+            if name:
+                msg += ' for ' + name
+            msg += ', must be in ' + str(rng)
+            logger.log(log_level, msg)
+
+    return result
+
 def qa_df_set(
         dfs, threshold=.1, ignore_min=None, ignore_max=None,
         stats_to_exclude=None, columns_to_exclude=None, error_columns=None,
@@ -167,7 +246,7 @@ def qa_preds(preds, warn_range, error_range=None, logger=None, note=None):
     prediction array.
 
     Args:
-        preds: pd.Series
+        preds: array, shape (n_samples, 1)
         warn_range: 2 elements iterable, e.g. [min, max] to warn
         error_range: 2 elements iterable or None, e.g. [min, max]
             for error, should involve warn_range.
@@ -180,8 +259,6 @@ def qa_preds(preds, warn_range, error_range=None, logger=None, note=None):
     Returns:
         bool, is QA passed or not
     '''
-    if not isinstance(preds, pd.Series):
-        raise TypeError('`preds` must be a pd.Series')
     if not warn_range[1] > warn_range[0]:
         raise ValueError(
             '`warn_range` not right, must be `warn_range[1]` > `warn_range[0]`')
@@ -190,7 +267,9 @@ def qa_preds(preds, warn_range, error_range=None, logger=None, note=None):
             error_range[0] < warn_range[0]):
             raise ValueError('`error_range` must contain `warn_range`')
 
-    preds_stats = {k:round(v, 5) for k, v in pd.Series(preds).describe().items()}
+    preds_copy = pd.Series(preds).copy()
+
+    preds_stats = {k:round(v, 5) for k, v in preds_copy.describe().items()}
     details = str(warn_range)
     if note:
         details += ' for ' + note
@@ -199,7 +278,7 @@ def qa_preds(preds, warn_range, error_range=None, logger=None, note=None):
         logger.info('predictions statistics: ' + str(preds_stats))
 
     is_passed = qa_array_statistics(
-        preds,
+        preds_copy,
         stats={
             'min':[warn_range[0], None],
             'max':[None, warn_range[1]]},
@@ -208,7 +287,7 @@ def qa_preds(preds, warn_range, error_range=None, logger=None, note=None):
 
     if error_range:
         is_passed = qa_array_statistics(
-            preds,
+            preds_copy,
             stats={
                 'min':[error_range[0], None],
                 'max':[None, error_range[1]]},
