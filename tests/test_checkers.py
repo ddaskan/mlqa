@@ -20,6 +20,47 @@ class TestCheckers(unittest.TestCase):
         logging.basicConfig(format='%(asctime)-15s %(message)s', level='DEBUG')
         cls.logger = logging.getLogger(cls.logger_name)
 
+    def test_qa_outliers(self):
+        func = checkers.qa_outliers
+
+        self.assertRaises(TypeError, func)
+
+        with self.assertLogs(self.logger_name, level='INFO') as log:
+            func(self.df, std=4, logger=self.logger)
+        self.assertRegex(
+            log.output[0], 
+            "^WARNING:test_mlqa:12 outliers detected within inlier range (.*)")
+        self.assertRegex(
+            log.output[1], 
+            "^WARNING:test_mlqa:10 outliers detected within inlier range (.*)")
+        self.assertRegex(
+            log.output[2], 
+            "^WARNING:test_mlqa:11 outliers detected within inlier range (.*)")
+
+        self.assertFalse(func(self.df, std=2))
+
+    def test_qa_outliers_1d(self):
+        func = checkers.qa_outliers_1d
+
+        self.assertRaises(TypeError, func)
+        self.assertRaises(ValueError, func, *[range(100), -2])
+        self.assertRaises(ValueError, func, *[range(100), [-0.1, 2]])
+
+        with self.assertLogs(self.logger_name, level='INFO') as log:
+            func(range(100), std=1, logger=self.logger)
+        self.assertEqual(
+            log.output,
+            [
+                'WARNING:test_mlqa:42 outliers detected within inlier range '
+                '(i.e. [20.488508024117984, 78.51149197588202])'
+            ])
+
+        self.assertTrue(func(range(100), std=2))
+        self.assertTrue(func(range(100), std=[1.8, 3]))
+
+        self.assertFalse(func(range(100), std=1))
+        self.assertFalse(func(range(100), std=[0.5, 3]))
+
     def test_qa_missing_values(self):
         func = checkers.qa_missing_values
         df_copy = self.df.copy()

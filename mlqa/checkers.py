@@ -4,11 +4,98 @@ This script includes indivdual QA functions for the module.
 from itertools import combinations
 import pandas as pd
 
+def qa_outliers(data, std, logger=None, log_level=30):
+    '''
+    QA check for outliers as wrapper of `qa_outliers_1d`.
+
+    Args:
+        data: 1d array or pd.DataFrame
+        std: list or float, distance from mean for outliers, can be 2 elements
+            iterable for different lower and upper bounds
+        logger: Python logging object or None
+        log_level: int,
+            https://docs.python.org/3/library/logging.html#logging-levels
+
+    Returns:
+        bool, is QA passed or not
+    '''
+    if isinstance(data, pd.DataFrame):
+        qa_results = []
+        for col in data.columns:
+            if pd.api.types.is_numeric_dtype(data[col]):
+                result = qa_outliers_1d(
+                    data[col], std=std, logger=logger, log_level=log_level, 
+                    name=col)
+                qa_results.append(result)
+        return all(qa_results)
+    else:
+        iter(data)
+        return qa_outliers_1d(data, std=std, logger=logger, log_level=log_level)
+
+def qa_outliers_1d(
+        array, std, logger=None, log_level=30, name=None):
+    '''
+    QA check for outliers of 1D array.
+
+    Args:
+        array: array, shape (n_samples, 1)
+        std: list or float, distance from mean for outliers, can be 2 elements
+            iterable for different lower and upper bounds
+        logger: Python logging object or None
+        log_level: int,
+            https://docs.python.org/3/library/logging.html#logging-levels
+        name: str, optional array name for logger
+
+    Returns:
+        bool, is QA passed or not
+    '''
+    iter(array)
+
+    array_copy = pd.Series(array).copy()
+
+    if std is not None:
+        mean = array_copy.mean()
+        if isinstance(std, (list, tuple)):
+            upper_std, lower_std = std
+        else:
+            upper_std = lower_std = float(std)
+        if not (upper_std > 0 and lower_std > 0):
+            raise ValueError('`std` must be positive')
+        upper_limit = mean + upper_std*array_copy.std()
+        lower_limit = mean - lower_std*array_copy.std()
+    
+    outlier_n = len(
+        array_copy[(array_copy > upper_limit) | (array_copy < lower_limit)])
+    result = outlier_n == 0
+
+    if not result:
+        if logger:
+            msg = '{} outliers detected within inlier range (i.e. {})'\
+                .format(outlier_n, [lower_limit, upper_limit])
+            if name:
+                msg += ' for ' + name
+            logger.log(log_level, msg)
+
+    return result
+
 def qa_missing_values(
         data, n=None, frac=None, threshold=.1, limit=[False, True], 
         logger=None, log_level=30):
     '''
-    Wrapper for `qa_missing_values_1d`
+    QA check for missing values as wrapper of `qa_missing_values_1d`
+
+    Args:
+        data: 1d array or pd.DataFrame
+        n: int or None, expected missing value count
+        frac: float or None, expected missing value percentage
+        threshold: float, percentage threshold for upper or lower limit
+        limit: list of bool, limit direction, which side of na limit to check
+        logger: Python logging object or None
+        log_level: int,
+            https://docs.python.org/3/library/logging.html#logging-levels
+
+    Returns:
+        bool, is QA passed or not
     '''
     if isinstance(data, pd.DataFrame):
         qa_results = []
@@ -35,7 +122,7 @@ def qa_missing_values_1d(
         n: int or None, expected missing value count
         frac: float or None, expected missing value percentage
         threshold: float, percentage threshold for upper or lower limit
-        limit: list of bool, which side of na limit to check
+        limit: list of bool, limit direction, which side of na limit to check
         logger: Python logging object or None
         log_level: int,
             https://docs.python.org/3/library/logging.html#logging-levels
@@ -418,6 +505,17 @@ def is_value_in_range(
         value, check_range, logger=None, log_level=None, log_msg=None):
     '''
     Checks if a `value` is in given `check_range`.
+
+    Args:
+        value: value to check
+        check_range: acceptable lower and upper bounds for `value`
+        logger: Python logging object or None
+        log_level: int,
+            https://docs.python.org/3/library/logging.html#logging-levels
+        log_msg: str or None, custom log message for `logger`
+
+    Returns:
+        bool, is QA passed or not
     '''
     float(value)
     iter(check_range)
