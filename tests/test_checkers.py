@@ -361,7 +361,7 @@ class TestCheckers(unittest.TestCase):
                 'Sex',
                 {'male':.33, 'female':.66},
                 'Survived',
-                tolerance=.1)
+                threshold=.1)
             )
         self.assertFalse(
             func(
@@ -369,7 +369,7 @@ class TestCheckers(unittest.TestCase):
                 'Sex',
                 {'male':.33, 'female':.66},
                 'Survived',
-                tolerance=.01)
+                threshold=.01)
             )
 
         self.assertTrue(
@@ -378,7 +378,7 @@ class TestCheckers(unittest.TestCase):
                 'Sex',
                 {'male':.53, 'female':.47},
                 'Siblings/Spouses Aboard',
-                tolerance=.01)
+                threshold=.01)
             )
         self.assertFalse(
             func(
@@ -386,7 +386,7 @@ class TestCheckers(unittest.TestCase):
                 'Sex',
                 {'male':.53, 'female':.47},
                 'Siblings/Spouses Aboard',
-                tolerance=.001)
+                threshold=.001)
             )
 
         self.assertTrue(
@@ -395,7 +395,7 @@ class TestCheckers(unittest.TestCase):
                 'Sex',
                 {'male':.5, 'female':.5},
                 'Fare',
-                tolerance=.1)
+                threshold=.1)
             )
         self.assertFalse(
             func(
@@ -403,7 +403,7 @@ class TestCheckers(unittest.TestCase):
                 'Sex',
                 {'male':.5, 'female':.5},
                 'Fare',
-                tolerance=.001)
+                threshold=.001)
             )
 
     def test_qa_preds_by_metric(self):
@@ -444,12 +444,22 @@ class TestCheckers(unittest.TestCase):
             *[range(1, 10), {'mean':[0, None], 'mean2':[0, None]}, None, 30])
 
         with self.assertLogs(self.logger_name, level='WARN') as log:
-            func(pd.Series(range(20, 40)), {'mean':[1, 10]}, logger=self.logger, log_level=30)
-            func(pd.Series(range(20, 40)), {'min':[1, 5]}, logger=self.logger, log_level=40)
+            func(
+                pd.Series(range(20, 40)), 
+                {'mean':[1, 10]}, 
+                logger=self.logger, 
+                log_level=30,
+                name='thisone')
+            func(
+                pd.Series(range(20, 40)), 
+                {'min':[1, 5]}, 
+                logger=self.logger, 
+                log_level=40)
         self.assertEqual(
             log.output,
             [
-                'WARNING:test_mlqa:mean value (i.e. 29.5) is not in the range of [1, 10]',
+                'WARNING:test_mlqa:mean value (i.e. 29.5) is not '
+                'in the range of [1, 10] for thisone',
                 'ERROR:test_mlqa:min value (i.e. 20) is not in the range of [1, 5]'
             ])
 

@@ -151,14 +151,12 @@ def qa_missing_values_1d(
         expected = int(array_len*frac)
 
     if all(limit):
-        result = expected*(1-threshold) <= actual <= expected*(1+threshold)
         rng = [expected*(1-threshold), expected*(1+threshold)]
     elif limit[0]:
-        result = expected*(1-threshold) <= actual
         rng = [expected*(1-threshold), None]
     elif limit[1]:
-        result = actual <= expected*(1+threshold)
         rng = [None, expected*(1+threshold)]
+    result = is_value_in_range(value=actual, check_range=rng)
 
     if not result:
         if logger:
@@ -173,7 +171,7 @@ def qa_missing_values_1d(
 def qa_df_set(
         dfs, threshold=.1, ignore_min=None, ignore_max=None,
         stats_to_exclude=None, columns_to_exclude=None, error_columns=None,
-        logger=None, note=None):
+        logger=None, name=None):
     '''
     Wrapper for `qa_df_pair()` to apply 2 length subsequences of `dfs`.
 
@@ -199,7 +197,7 @@ def qa_df_set(
             would be ignored. Only these columns are logged with
             level 40.
         logger: Python logging object or None
-        note: None or str, additional information for `logger`
+        name: str, optional qa name for logger
 
     Returns:
         bool, is QA passed or not
@@ -214,7 +212,7 @@ def qa_df_set(
             pair[0], pair[1], threshold=threshold, ignore_min=ignore_min,
             ignore_max=ignore_max, stats_to_exclude=stats_to_exclude,
             columns_to_exclude=columns_to_exclude, error_columns=error_columns,
-            logger=logger, note=note)
+            logger=logger, name=name)
         qa_results.append(result)
 
     return all(qa_results)
@@ -222,7 +220,7 @@ def qa_df_set(
 def qa_df_pair(
         df1, df2, threshold=.1, ignore_min=None, ignore_max=None,
         stats_to_exclude=None, columns_to_exclude=None, error_columns=None,
-        logger=None, note=None):
+        logger=None, name=None):
     '''
     QA two datasets' statistics by utilizing describe() method
     of pd.DataFrame. Ignores non-numeric columns.
@@ -247,7 +245,7 @@ def qa_df_pair(
             would be ignored. Only these columns are logged with
             level 40.
         logger: Python logging object or None
-        note: None or str, additional information for `logger`
+        name: str, optional qa name for logger
 
     Returns:
         bool, is QA passed or not
@@ -256,8 +254,8 @@ def qa_df_pair(
         raise TypeError('`df1` and `df2` must be pd.DataFrame')
 
     details = str(threshold)
-    if note:
-        details += ' for ' + note
+    if name:
+        details += ' for ' + name
     if logger:
         logger.info('train/test sets QA initiated with threshold ' + details)
 
@@ -324,7 +322,7 @@ def qa_df_pair(
         return all(error_results)
     return all(warn_results)
 
-def qa_preds(preds, warn_range, error_range=None, logger=None, note=None):
+def qa_preds(preds, warn_range, error_range=None, logger=None, name=None):
     '''
     Wrapper for `qa_array_statistics` for stats `min` and `max` only
 
@@ -341,7 +339,7 @@ def qa_preds(preds, warn_range, error_range=None, logger=None, note=None):
         logger: Python logging object or None. If None,
             no practical use of this function. Use
             `qa_array_statistics` instead.
-        note: str, additional information for `logger`
+        name: str, optional qa name for logger
 
     Returns:
         bool, is QA passed or not
@@ -358,8 +356,8 @@ def qa_preds(preds, warn_range, error_range=None, logger=None, note=None):
 
     preds_stats = {k:round(v, 5) for k, v in preds_copy.describe().items()}
     details = str(warn_range)
-    if note:
-        details += ' for ' + note
+    if name:
+        details += ' for ' + name
     if logger:
         logger.info('predictions QA initiated with warn_range ' + details)
         logger.info('predictions statistics: ' + str(preds_stats))
@@ -388,7 +386,7 @@ def qa_preds(preds, warn_range, error_range=None, logger=None, note=None):
 
 def qa_category_distribution_on_value(
         df, category_column_name, distribution, value_column_name,
-        tolerance=.1, logger=None, log_level=30):
+        threshold=.1, logger=None, log_level=30):
     '''
     QA check for the distribution of category-value pairs in a pd.DataFrame
 
@@ -398,7 +396,7 @@ def qa_category_distribution_on_value(
         distribution: dict, expected value distribution of the category
             (e.g. {'Male':.05, 'Female':.14, 'Undefined':.81})
         value_column_name: str, numeric column name to check distribution
-        tolerance: float
+        threshold: float
         logger: Python logging object or None
         log_level: int,
             https://docs.python.org/3/library/logging.html#logging-levels
@@ -410,7 +408,7 @@ def qa_category_distribution_on_value(
         raise TypeError('`df` must be a pd.DataFrame')
     if not isinstance(distribution, dict):
         raise TypeError('`distribution` must be a dict')
-    float(tolerance)
+    float(threshold)
 
     qa_results = []
     df_dist = df[[category_column_name, value_column_name]] \
@@ -430,7 +428,7 @@ def qa_category_distribution_on_value(
                 category_column_name, value_column_name, 
                 cat_value, expected, actual)
 
-        if not abs(actual - expected)/expected < tolerance:
+        if not abs(actual - expected)/expected < threshold:
             is_passed = False
             if logger:
                 logger.log(log_level, log_msg)
@@ -467,7 +465,7 @@ def qa_preds_by_metric(
             .format(metric.__name__, score, check_range))
     return is_passed
 
-def qa_array_statistics(array, stats, logger=None, log_level=30):
+def qa_array_statistics(array, stats, logger=None, log_level=30, name=None):
     '''
     QA check for 1D array statistics such as mean, count.
 
@@ -475,16 +473,19 @@ def qa_array_statistics(array, stats, logger=None, log_level=30):
         array: array, shape (n_samples, 1)
         stats: dict, stats to qa
             (e.g. {'mean':[0.1, 0.99], 'count':[100, None]}(
-            Options for keys are ['mean', 'min', 'max', 'sum', 'count', 'std'].
+            Options for keys are ['mean', 'min', 'max', 'sum', 'count', 'std']
+            or function such as `np.mean`.
         logger: Python logging object or None
         log_level: int,
             https://docs.python.org/3/library/logging.html#logging-levels
+        name: str, optional array name for logger
 
     Returns:
         bool, is QA passed or not
     '''
     stats_options = ['mean', 'min', 'max', 'sum', 'count', 'std']
-    if not all([func in stats_options for func in stats.keys()]):
+    if not all([func in stats_options for func in stats.keys() 
+            if isinstance(func, str)]):
         raise ValueError('given stat not in {}'.format(stats_options))
 
     array_copy = pd.Series(array).copy()
@@ -493,10 +494,12 @@ def qa_array_statistics(array, stats, logger=None, log_level=30):
     for func in stats.keys():
         check_range = stats[func]
         value = array_copy.agg(func)
+        msg = '{} value (i.e. {}) is not in the range of {}' \
+            .format(func, value, check_range)
+        if name:
+            msg += ' for ' + name
         is_passed = is_value_in_range(
-            value, check_range, logger, log_level,
-            log_msg='{} value (i.e. {}) is not in the range of {}' \
-                .format(func, value, check_range))
+            value, check_range, logger, log_level,log_msg=msg)
         qa_results_for_stats.append(is_passed)
 
     return all(qa_results_for_stats)
