@@ -494,8 +494,12 @@ def qa_array_statistics(array, stats, logger=None, log_level=30, name=None):
     for func in stats.keys():
         check_range = stats[func]
         value = array_copy.agg(func)
+        if isinstance(func, str):
+            func_name = func
+        else:
+            func_name = func.__name__
         msg = '{} value (i.e. {}) is not in the range of {}' \
-            .format(func, value, check_range)
+            .format(func_name, value, check_range)
         if name:
             msg += ' for ' + name
         is_passed = is_value_in_range(
@@ -547,3 +551,7 @@ def is_value_in_range(
                 logger.log(log_level, log_msg)
 
     return is_passed
+
+def na_rate(array):
+    '''Agg function to calculate na rate in pd.Series'''
+    return array.isna().sum()/len(array)
