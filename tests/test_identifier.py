@@ -1,5 +1,8 @@
 import unittest
 import sys
+import os
+import shutil
+import pickle
 import logging
 import pandas as pd
 import numpy as np
@@ -19,6 +22,13 @@ class TestDiffChecker(unittest.TestCase):
         cls.logger_name = 'test_mlqa'
         logging.basicConfig(format='%(asctime)-15s %(message)s', level='DEBUG')
         cls.logger = logging.getLogger(cls.logger_name)
+
+        cls.temp_dir = 'temp/'
+        os.mkdir(cls.temp_dir)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.temp_dir)
 
     @unittest.skip("not ready")
     def test___init__(self):
@@ -65,6 +75,11 @@ class TestDiffChecker(unittest.TestCase):
         dc = DiffChecker()
         self.assertRaises(TypeError, dc.add_stat, *[['mean']])
         self.assertRaises(TypeError, dc.add_stat, *[1])
+
+        dc = DiffChecker()
+        dc.set_stats(['mean', np.sum])
+        self.assertRaises(ValueError, dc.add_stat, *['mean'])
+        self.assertRaises(ValueError, dc.add_stat, *[np.sum])
 
         with self.assertLogs(self.logger_name, level='INFO') as log:
             dc = DiffChecker(logger=self.logger, log_info=True)
@@ -152,9 +167,27 @@ class TestDiffChecker(unittest.TestCase):
     def test_check(self):
         pass
 
-    @unittest.skip("not ready")
-    def test_to_pcikle(self):
-        pass
+    def test_to_pickle(self):
+        log_file = os.path.join(self.temp_dir, 'temp.log')
+        dc1 = DiffChecker(logger=log_file, log_info=True)
+        dc1.set_stats(['mean', 'max'])
+        dc1.fit(self.df)
+        fname = os.path.join(self.temp_dir, 'DiffChecker.pkl')
+        dc1.to_pickle(path=fname)
+
+        pkl_file = open(fname, 'rb')
+        dc2 = pickle.load(pkl_file)
+        pkl_file.close()
+
+        self.assertEqual(dc1.threshold, dc2.threshold)
+        self.assertTrue(dc1.threshold_df.equals(dc2.threshold_df))
+        self.assertEqual(dc1.stats, dc2.stats)
+        self.assertTrue(dc1.df_fit_stats.equals(dc2.df_fit_stats))
+
+        dc2.set_threshold({'Fare':0.85})
+        self.assertTrue(
+            all([th==0.85 for th in dc2.threshold_df['Fare'].tolist()]))
+        self.assertRaises(ValueError, dc2.add_stat, *['min'])
 
     def test__method_init_logger(self):
         # no need to write cases for this method since it's already 

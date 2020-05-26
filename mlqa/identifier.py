@@ -1,5 +1,6 @@
 import sys
 import logging
+from importlib import reload
 import pickle
 import pandas as pd
 import numpy as np
@@ -22,15 +23,28 @@ class DiffChecker(object):
             log_info=False
     ):        
 
+        # Class logger reloads logging module in each call not to create 
+        # conflict, this is okay as long as this is the only logger in the
+        # environment. Having external logger is highly recommended in all
+        # other cases.
         if logger == 'print':
+            logging.shutdown()
+            reload(logging)
             logging.basicConfig(
                 format='%(asctime)-15s %(message)s',
                 level='DEBUG')
-            self.logger = logging.getLogger('DiffChecker.log')
-        elif isinstance(logger, str) and '.' in logger:
-            # TODO: create log file here
-            pass
+            self.logger = logging.getLogger('DiffCheckerLogIdToPrint')
+        elif isinstance(logger, str):
+            logging.shutdown()
+            reload(logging)
+            handler = logging.FileHandler(logger, mode='w+')
+            handler.setFormatter(logging.Formatter(
+                fmt='%(levelname)s|%(asctime)s|%(message)s'))
+            self.logger = logging.getLogger('DiffCheckerLogIdToDump')
+            self.logger.setLevel(logging.DEBUG)
+            self.logger.addHandler(handler)
         else:
+            # if external logger provided
             self.logger = logger
         self.log_level = qa_log_level or 30
         self.log_info = log_info
@@ -82,6 +96,8 @@ class DiffChecker(object):
             raise ValueError('self.stats cannot be altered after `fit()` call')
         if not (isinstance(func, str) or callable(func)):
             raise TypeError('`func` must be str or callable')
+        if func in self.stats:
+            raise ValueError('`func` is already in `self.stats`')
         self._method_init_logger(locals())
 
         self.stats.append(func)
