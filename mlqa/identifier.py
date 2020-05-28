@@ -116,7 +116,7 @@ class DiffChecker(object):
 
         if isinstance(threshold, dict):
             if self.df_fit_stats.empty:
-                raise ValueError('call `fit()` first')
+                raise ValueError('call `fit()` first for column level threshold')
             for col, v1 in threshold.items():
                 if col not in self.df_fit_stats.columns:
                     raise ValueError('{} not found in fitted DataFrame'\
@@ -165,7 +165,51 @@ class DiffChecker(object):
         self.threshold_df.replace(self.threshold_df, np.NaN, inplace=True)
 
     def check(self, df_to_check, columns=None, columns_to_exclude=None):
-        raise NotImplementedError()
+        '''
+        # TODO: docstring here
+        '''
+        assert isinstance(self.stats, list) and len(self.stats) >= 1
+        if not isinstance(df_to_check, pd.DataFrame):
+            raise TypeError('`df_to_check` must be a pd.DataFrame')
+        if columns is not None and columns_to_exclude is not None:
+            raise ValueError('only one must be given, '
+                             '`columns` or `columns_to_exclude`')
+        if columns is not None:
+            if not isinstance(columns, list):
+                raise TypeError('`columns` must be a list')
+        if columns_to_exclude is not None:
+            if not isinstance(columns_to_exclude, list):
+                raise TypeError('`columns_to_exclude` must be a list')
+        self._method_init_logger(locals())
+
+        cols_to_check = self.df_fit_stats.columns.tolist()
+        if columns:
+            cols_to_check = list(set(cols_to_check) & set(columns))
+        if columns_to_exclude:
+            cols_to_check = [c for c in cols_to_check if c not \
+                in columns_to_exclude]
+
+        qa_results = []
+        for col in cols_to_check:
+            for stat in self.stats:
+                if isinstance(stat, str):
+                    stat_name = stat
+                else:
+                    stat_name = stat.__name__
+                th = self.threshold_df.loc[stat_name, col]
+                th = self.threshold if pd.isna(th) else th
+                val = self.df_fit_stats.loc[stat_name, col]
+                tol = abs(val)*th
+                ll, ul = val-tol, val+tol
+                result = ch.qa_array_statistics(
+                    df_to_check[col],
+                    {stat:[ll, ul]},
+                    logger=self.logger,
+                    log_level=self.log_level,
+                    name=col)
+                qa_results.append(result)
+
+        return all(qa_results)
 
     def to_pickle(self, path='DiffChecker.pkl'):
         '''
