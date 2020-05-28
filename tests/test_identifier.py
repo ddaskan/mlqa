@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 sys.path.append('../')
 from mlqa.identifier import DiffChecker
+from mlqa import checkers as ch
 
 class TestDiffChecker(unittest.TestCase):
 
@@ -159,13 +160,113 @@ class TestDiffChecker(unittest.TestCase):
         self.assertTrue(
             all([th==0.35 for th in dc.threshold_df['Pclass'].tolist()]))
 
-    @unittest.skip("not ready")
     def test_fit(self):
-        pass
+        dc = DiffChecker()
+        self.assertRaises(TypeError, dc.fit)
+        self.assertRaises(TypeError, dc.fit, *['error'])
 
-    @unittest.skip("not ready")
+        stats = ['mean', 'count']
+        dc.set_stats(stats)
+        dc.fit(self.df)
+        num_cols = self.df.select_dtypes(include=np.number).columns.tolist()
+
+        # check the shape is expected and same for both
+        self.assertCountEqual(num_cols, dc.df_fit_stats.columns)
+        self.assertCountEqual(stats, dc.df_fit_stats.index)
+        self.assertEqual(len(stats), dc.df_fit_stats.shape[0])
+        self.assertEqual(dc.threshold_df.shape, dc.df_fit_stats.shape)
+        self.assertTrue(dc.threshold_df.columns.equals(dc.df_fit_stats.columns))
+        self.assertTrue(dc.threshold_df.index.equals(dc.df_fit_stats.index))
+        
+        # check values are fine
+        for c in dc.threshold_df.columns:
+            for v in dc.threshold_df[c]:
+                with self.subTest(v=v):
+                    self.assertTrue(pd.isna(v))
+        self.assertCountEqual(dc.df_fit_stats.T['count'].unique(), [887])
+        self.assertAlmostEqual(
+            dc.df_fit_stats.loc['mean', 'Survived'],
+            0.3856,
+            places=4)
+        self.assertAlmostEqual(
+            dc.df_fit_stats.loc['mean', 'Pclass'],
+            2.3055,
+            places=4)
+        self.assertAlmostEqual(
+            dc.df_fit_stats.loc['mean', 'Parents/Children Aboard'],
+            0.3833,
+            places=4)
+        self.assertAlmostEqual(
+            dc.df_fit_stats.loc['mean', 'Fare'],
+            32.3054,
+            places=4)
+
     def test_check(self):
-        pass
+        dc = DiffChecker()
+        dc.fit(self.df)
+        self.assertRaises(TypeError, dc.check)
+        self.assertRaises(TypeError, dc.check, *['error'])
+        self.assertRaises(ValueError, dc.check, *[self.df1, ['error1'], ['error2']])
+        self.assertRaises(
+            TypeError, 
+            dc.check, 
+            **{'df_to_check':self.df1, 'columns':'error'})
+        self.assertRaises(
+            TypeError, 
+            dc.check, 
+            **{'df_to_check':self.df1, 'columns_to_exclude':'error'})
+
+        # TODO: check if logs correctly here
+
+        dc = DiffChecker()
+        dc.set_stats(['mean', ch.na_rate, 'std'])
+        dc.set_threshold(0.5)
+        dc.fit(self.df)
+        self.assertTrue(dc.check(self.df1))
+        self.assertTrue(dc.check(self.df2))
+        self.assertTrue(dc.check(self.df3))
+        self.assertFalse(dc.check(self.df4))
+
+        dc = DiffChecker()
+        dc.set_stats(['mean', ch.na_rate, 'std'])
+        dc.set_threshold(0.3)
+        dc.fit(self.df)
+        self.assertTrue(
+            dc.check(self.df1, columns_to_exclude=['Siblings/Spouses Aboard']))
+        self.assertTrue(dc.check(self.df2, columns=['Survived', 'Pclass']))
+        self.assertTrue(dc.check(self.df3))
+        self.assertFalse(dc.check(self.df4))
+
+        dc = DiffChecker()
+        dc.set_stats(['mean', ch.na_rate, 'std'])
+        dc.set_threshold(0.3)
+        dc.fit(self.df)
+        dc.set_threshold({'Siblings/Spouses Aboard':0.5})
+        dc.set_threshold({'Fare':{'na_rate':0.0}})
+        self.assertTrue(dc.check(self.df1))
+        dc.set_threshold({'Survived':{'mean':0.0}})
+        self.assertFalse(dc.check(self.df1))
+        dc.set_threshold({'Survived':{'mean':0.01}})
+        self.assertFalse(dc.check(self.df1))
+        self.assertTrue(dc.check(self.df1, columns_to_exclude=['Survived']))
+        self.assertTrue(dc.check(self.df1, columns=['Fare']))
+
+        dc = DiffChecker()
+        dc.set_stats(['mean', 'max'])
+        dc.set_threshold(0.01)
+        dc.fit(self.df)
+        self.assertFalse(dc.check(self.df1))
+        self.assertFalse(dc.check(self.df2))
+        self.assertFalse(dc.check(self.df3))
+        self.assertFalse(dc.check(self.df4))
+
+        dc = DiffChecker()
+        dc.set_stats(['count'])
+        dc.fit(self.df1)
+        dc.set_threshold(0.01)
+        self.assertTrue(dc.check(self.df2))
+        dc.set_threshold(0.5)
+        self.assertFalse(dc.check(self.df4))
 
     def test_to_pickle(self):
         log_file = os.path.join(self.temp_dir, 'temp.log')
