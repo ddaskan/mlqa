@@ -31,9 +31,18 @@ class TestDiffChecker(unittest.TestCase):
     def tearDownClass(cls):
         shutil.rmtree(cls.temp_dir)
 
-    @unittest.skip("not ready")
     def test___init__(self):
-        pass
+        dc = DiffChecker()
+        self.assertIsInstance(dc.log_level, int)
+        self.assertIs(dc.log_info, False)
+        self.assertTrue(len(dc.stats) >= 1)
+        self.assertIsInstance(dc.threshold, float)
+        self.assertTrue(dc.threshold_df.empty)
+        self.assertTrue(dc.df_fit_stats.empty)
+
+        dc = DiffChecker(qa_log_level=40, log_info=True)
+        self.assertIs(dc.log_level, 40)
+        self.assertIs(dc.log_info, True)
 
     def test_set_stats(self):
         dc = DiffChecker()
@@ -216,7 +225,24 @@ class TestDiffChecker(unittest.TestCase):
             dc.check, 
             **{'df_to_check':self.df1, 'columns_to_exclude':'error'})
 
-        # TODO: check if logs correctly here
+        with self.assertLogs(self.logger_name, level='INFO') as log:
+            dc = DiffChecker(logger=self.logger, log_info=False)
+            dc.set_stats(['mean', ch.na_rate, 'std', 'max'])
+            dc.set_threshold(0.3)
+            dc.fit(self.df)
+            dc.check(self.df1)
+        self.assertRegex(
+            log.output[0], 
+            "^WARNING:test_mlqa:mean value \(i.e. 0.73\) is not in the (.*) "
+            "for Siblings/Spouses Aboard$")
+        self.assertEqual(
+            log.output[1], 
+            "WARNING:test_mlqa:max value (i.e. 5) is not in the range of "
+            "[5.6, 10.4] for Siblings/Spouses Aboard")
+        self.assertEqual(
+            log.output[2], 
+            "WARNING:test_mlqa:max value (i.e. 263.0) is not in the range "
+            "of [358.63044, 666.02796] for Fare")
 
         dc = DiffChecker()
         dc.set_stats(['mean', ch.na_rate, 'std'])
