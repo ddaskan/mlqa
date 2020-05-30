@@ -1,3 +1,6 @@
+'''
+This script is for DiffChecker class.
+'''
 import sys
 import logging
 from importlib import reload
@@ -6,7 +9,7 @@ import pandas as pd
 import numpy as np
 from mlqa import checkers as ch
 
-class DiffChecker(object):
+class DiffChecker():
     '''
     # TODO: docstring
     '''
@@ -16,14 +19,14 @@ class DiffChecker(object):
     df_fit_stats = pd.DataFrame()
 
     def __init__(
-            self, 
-            qa_level='loose', 
-            logger=None, 
+            self,
+            qa_level='loose',
+            logger=None,
             qa_log_level=None,
             log_info=False
-    ):        
+    ):
 
-        # Class logger reloads logging module in each call not to create 
+        # Class logger reloads logging module in each call not to create
         # conflict, this is okay as long as this is the only logger in the
         # environment. Having external logger is highly recommended in all
         # other cases.
@@ -214,9 +217,9 @@ class DiffChecker(object):
     def to_pickle(self, path='DiffChecker.pkl'):
         '''
         Pickle (serialize) object to a file.
-        
+
         Args:
-            path: str, file path where the pickled object 
+            path: str, file path where the pickled object
                 will be stored
         '''
         self._method_init_logger(locals())
@@ -225,7 +228,7 @@ class DiffChecker(object):
         pickle.dump(self, output, -1)
         output.close()
 
-    def _method_init_logger(self, args, exclude=['self']):
+    def _method_init_logger(self, args, exclude=('self')):
         '''
         Logs method initiation with given arguments.
 

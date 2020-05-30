@@ -28,13 +28,13 @@ class TestCheckers(unittest.TestCase):
         with self.assertLogs(self.logger_name, level='INFO') as log:
             func(self.df, std=4, logger=self.logger)
         self.assertRegex(
-            log.output[0], 
+            log.output[0],
             "^WARNING:test_mlqa:12 outliers detected within inlier range (.*)")
         self.assertRegex(
-            log.output[1], 
+            log.output[1],
             "^WARNING:test_mlqa:10 outliers detected within inlier range (.*)")
         self.assertRegex(
-            log.output[2], 
+            log.output[2],
             "^WARNING:test_mlqa:11 outliers detected within inlier range (.*)")
 
         self.assertFalse(func(self.df, std=2))
@@ -97,25 +97,25 @@ class TestCheckers(unittest.TestCase):
 
         self.assertRaises(TypeError, func)
         self.assertRaises(
-            TypeError, 
-            func, 
+            TypeError,
+            func,
             **{'array':range(100), 'n':None, 'frac':None})
         self.assertRaises(ValueError, func, **{'array':range(100), 'frac':1.0})
         self.assertRaises(ValueError, func, **{'array':range(100), 'frac':2.0})
         self.assertRaises(
-            ValueError, 
-            func, 
+            ValueError,
+            func,
             **{'array':range(100), 'frac':.2, 'limit':[False, False]})
         self.assertRaises(
-            ValueError, 
-            func, 
+            ValueError,
+            func,
             **{'array':range(100), 'frac':.2, 'limit':[True]})
         self.assertRaises(
-            TypeError, 
-            func, 
+            TypeError,
+            func,
             **{'array':range(100), 'frac':.1, 'name':list()})
 
-        list_20na = pd.Series(range(1,101))
+        list_20na = pd.Series(range(1, 101))
         list_20na.loc[list_20na.sample(n=20).index] = None
         with self.assertLogs(self.logger_name, level='INFO') as log:
             func(list_20na, n=5, logger=self.logger)
@@ -137,10 +137,10 @@ class TestCheckers(unittest.TestCase):
 
         for na_val in [None, np.nan, np.NaN]:
             with self.subTest(na_val=na_val):
-                list_10na = pd.Series(range(1,101))
+                list_10na = pd.Series(range(1, 101))
                 list_10na.loc[list_10na.sample(n=10).index] = na_val
                 list_10na = list_10na.tolist()
-                
+
                 self.assertTrue(
                     func(list_10na, n=10, threshold=.1, limit=[False, True]))
                 self.assertTrue(
@@ -221,8 +221,8 @@ class TestCheckers(unittest.TestCase):
         self.assertRaises(TypeError, func, *['error', pd.DataFrame()])
         self.assertRaises(TypeError, func, *['error', 'error'])
         self.assertRaises(
-            KeyError, 
-            func, 
+            KeyError,
+            func,
             **{'df1':self.df1, 'df2':self.df2, 'error_columns':['error_col']})
 
         with self.assertLogs(self.logger_name, level='INFO') as log:
@@ -445,15 +445,15 @@ class TestCheckers(unittest.TestCase):
 
         with self.assertLogs(self.logger_name, level='WARN') as log:
             func(
-                pd.Series(range(20, 40)), 
-                {'mean':[1, 10]}, 
-                logger=self.logger, 
+                pd.Series(range(20, 40)),
+                {'mean':[1, 10]},
+                logger=self.logger,
                 log_level=30,
                 name='thisone')
             func(
-                pd.Series(range(20, 40)), 
-                {'min':[1, 5]}, 
-                logger=self.logger, 
+                pd.Series(range(20, 40)),
+                {'min':[1, 5]},
+                logger=self.logger,
                 log_level=40)
         self.assertEqual(
             log.output,

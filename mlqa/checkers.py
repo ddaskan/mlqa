@@ -24,13 +24,13 @@ def qa_outliers(data, std, logger=None, log_level=30):
         for col in data.columns:
             if pd.api.types.is_numeric_dtype(data[col]):
                 result = qa_outliers_1d(
-                    data[col], std=std, logger=logger, log_level=log_level, 
+                    data[col], std=std, logger=logger, log_level=log_level,
                     name=col)
                 qa_results.append(result)
         return all(qa_results)
-    else:
-        iter(data)
-        return qa_outliers_1d(data, std=std, logger=logger, log_level=log_level)
+
+    iter(data)
+    return qa_outliers_1d(data, std=std, logger=logger, log_level=log_level)
 
 def qa_outliers_1d(
         array, std, logger=None, log_level=30, name=None):
@@ -63,7 +63,7 @@ def qa_outliers_1d(
             raise ValueError('`std` must be positive')
         upper_limit = mean + upper_std*array_copy.std()
         lower_limit = mean - lower_std*array_copy.std()
-    
+
     outlier_n = len(
         array_copy[(array_copy > upper_limit) | (array_copy < lower_limit)])
     result = outlier_n == 0
@@ -79,7 +79,7 @@ def qa_outliers_1d(
     return result
 
 def qa_missing_values(
-        data, n=None, frac=None, threshold=.1, limit=[False, True], 
+        data, n=None, frac=None, threshold=.1, limit=(False, True),
         logger=None, log_level=30):
     '''
     QA check for missing values as wrapper of `qa_missing_values_1d`
@@ -101,18 +101,18 @@ def qa_missing_values(
         qa_results = []
         for col in data.columns:
             result = qa_missing_values_1d(
-                data[col], n=n, frac=frac, threshold=threshold, limit=limit, 
+                data[col], n=n, frac=frac, threshold=threshold, limit=limit,
                 logger=logger, log_level=log_level, name=col)
             qa_results.append(result)
         return all(qa_results)
-    else:
-        iter(data)
-        return qa_missing_values_1d(
-            data, n=n, frac=frac, threshold=threshold, limit=limit, 
-            logger=logger, log_level=log_level)
+
+    iter(data)
+    return qa_missing_values_1d(
+        data, n=n, frac=frac, threshold=threshold, limit=limit,
+        logger=logger, log_level=log_level)
 
 def qa_missing_values_1d(
-        array, n=None, frac=None, threshold=.1, limit=[False, True], 
+        array, n=None, frac=None, threshold=.1, limit=(False, True),
         logger=None, log_level=30, name=None):
     '''
     QA check for missing values of 1D array.
@@ -134,7 +134,7 @@ def qa_missing_values_1d(
     if n is None and frac is None:
         raise TypeError('`n` or `frac` must be given')
     if frac is not None:
-        if not (0 < frac < 1):
+        if not 0 < frac < 1:
             raise ValueError('`frac` must be between 0 and 1')
     if not (len(limit) == 2 and any(limit)):
         raise ValueError('`limit` not look right')
@@ -276,8 +276,8 @@ def qa_df_pair(
         for e_col in error_columns:
             if e_col not in df1_describe.columns:
                 raise KeyError('`{}` not in `{}`'.format(
-                        e_col, 
-                        df1_describe.columns.tolist()))
+                    e_col,
+                    df1_describe.columns.tolist()))
 
     if stats_to_exclude:
         df1_describe = df1_describe.drop(stats_to_exclude, axis=0)
@@ -425,7 +425,7 @@ def qa_category_distribution_on_value(
         log_msg = "{0} distribution looks wrong, check {1} for {0}={2}."\
             " Expected={3}, Actual={4}"\
             .format(
-                category_column_name, value_column_name, 
+                category_column_name, value_column_name,
                 cat_value, expected, actual)
 
         if not abs(actual - expected)/expected < threshold:
@@ -484,8 +484,8 @@ def qa_array_statistics(array, stats, logger=None, log_level=30, name=None):
         bool, is QA passed or not
     '''
     stats_options = ['mean', 'min', 'max', 'sum', 'count', 'std']
-    if not all([func in stats_options for func in stats.keys() 
-            if isinstance(func, str)]):
+    if not all([func in stats_options for func in stats.keys()
+                if isinstance(func, str)]):
         raise ValueError('given stat not in {}'.format(stats_options))
 
     array_copy = pd.Series(array).copy()
@@ -503,7 +503,7 @@ def qa_array_statistics(array, stats, logger=None, log_level=30, name=None):
         if name:
             msg += ' for ' + name
         is_passed = is_value_in_range(
-            value, check_range, logger, log_level,log_msg=msg)
+            value, check_range, logger, log_level, log_msg=msg)
         qa_results_for_stats.append(is_passed)
 
     return all(qa_results_for_stats)
