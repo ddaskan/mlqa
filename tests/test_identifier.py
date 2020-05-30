@@ -7,7 +7,7 @@ import logging
 import pandas as pd
 import numpy as np
 sys.path.append('../')
-from mlqa.identifier import DiffChecker
+from mlqa.identifiers import DiffChecker
 from mlqa import checkers as ch
 
 class TestDiffChecker(unittest.TestCase):
