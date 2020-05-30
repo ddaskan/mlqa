@@ -10,7 +10,12 @@ class TestCheckers(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.df = pd.read_csv('titanic.csv')
+        for path in ['', '../', 'tests/', '../tests/']:
+            try:
+                cls.df = pd.read_csv(path+'titanic.csv')
+                break
+            except:
+                pass
         cls.df1 = cls.df.iloc[:100]
         cls.df2 = cls.df.iloc[100:200]
         cls.df3 = cls.df.iloc[200:300]
