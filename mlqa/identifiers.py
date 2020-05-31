@@ -1,5 +1,5 @@
 '''
-This script is for DiffChecker class.
+This module is for DiffChecker class.
 '''
 import sys
 import logging
@@ -7,11 +7,21 @@ from importlib import reload
 import pickle
 import pandas as pd
 import numpy as np
+sys.path.append('../')
 from mlqa import checkers as ch
 
 class DiffChecker():
-    '''
-    # TODO: docstring
+    '''Integrated QA performer on pd.DataFrame with logging functionality.
+
+    Args:
+        qa_level (str): quick set for QA level, can be one of ['loose', 'mid', 'strict']
+        logger (str or logging.Logger): 'print' for print only, every other
+            str creates a file for logging. using external logging.Logger object
+            is highly recommended, i.e. logger=<mylogger>.
+        qa_log_level (int): qa message logging level
+        log_info (bool): `True` if method calls or arguments also need to be
+            logged
+
     '''
     stats = []
     threshold = 0.0
@@ -73,12 +83,15 @@ class DiffChecker():
         self.set_threshold(qa_levels[qa_level]['threshold'])
 
     def set_stats(self, funcs):
-        '''
-        Sets statistic functions list to check by.
+        '''Sets statistic functions list to check by.
 
         Args:
-            funcs: list, list of functions and/or function names,
+            funcs (list): list of functions and/or function names,
                 e.g. [np.sum, 'mean']
+
+        See Also:
+            `add_stat <#identifiers.DiffChecker.add_stat>`_: just to add one
+
         '''
         if not self.df_fit_stats.empty:
             raise ValueError('self.stats cannot be altered after `fit()` call')
@@ -89,11 +102,14 @@ class DiffChecker():
         self.stats = funcs
 
     def add_stat(self, func):
-        '''
-        Appends a statistic function into the exsisting list.
+        '''Appends a statistic function into the existing list (i.e. `stats <#identifiers.DiffChecker.stats>`_).
 
         Args:
-            func: function or function name (e.g. np.sum or 'mean')
+            func (func): function name (e.g. np.sum or 'mean')
+
+        See Also:
+            `set_stats <#identifiers.DiffChecker.set_stats>`_: to reset all
+
         '''
         if not self.df_fit_stats.empty:
             raise ValueError('self.stats cannot be altered after `fit()` call')
@@ -106,14 +122,30 @@ class DiffChecker():
         self.stats.append(func)
 
     def set_threshold(self, threshold):
-        '''
-        Sets threshold for statistic-column pairs.
+        '''Sets threshold for statistic-column pairs.
 
         Args:
-            threshold: float or dict
-                `dc.set_threshold(0.1)` to reset all thresholds
-                `dc.set_threshold({'col1':0.2, 'col2':0.1})` to set column level
-                `dc.set_threshold({'col1':{'mean':0.1}})` to set column-stat level
+            threshold (float or dict): can be used to set for all or column
+                statistic pairs.
+
+        Example:
+            >>> dc = DiffChecker()
+            >>> dc.set_stats(['mean', 'max'])
+            >>> dc.set_threshold(0.1) # to reset all thresholds
+            >>> print(dc.threshold)
+            0.1
+            >>> dc.fit(pd.DataFrame({'col1':[1, 2, 3, 4], 'col2':[0]*4}))
+            >>> dc.set_threshold({'col1':0.2, 'col2':0.1}) # to set in column level
+            >>> print(dc.threshold_df)
+                  col1  col2
+            mean   0.2   0.1
+            max    0.2   0.1
+            >>> dc.set_threshold({'col1':{'mean':0.1}}) # to set in column-stat level
+            >>> print(dc.threshold_df)
+                  col1  col2
+            mean   0.1   0.1
+            max    0.2   0.1
+
         '''
         self._method_init_logger(locals())
 
@@ -143,11 +175,25 @@ class DiffChecker():
             self.threshold = th
 
     def fit(self, df):
-        '''
-        Fits given `df`.
+        '''Fits given `df`.
+
+        Based on given `df` and `stats <#identifiers.DiffChecker.stats>`_ attribute, this method constructs
+        `df_fit_stats <#identifiers.DiffChecker.df_fit_stats>`_ attribute to store column statistics. This is later to
+        be used by `check <#identifiers.DiffChecker.check>`_ method. Only works
+        in numerical columns.
 
         Args:
-            df: pd.DataFrame
+            df (pd.DataFrame): data to be fit
+
+        Example:
+            >>> dc = DiffChecker()
+            >>> dc.set_stats(['mean', 'max'])
+            >>> dc.fit(pd.DataFrame({'col1':[1, 2, 3, 4], 'col2':[0]*4}))
+            >>> print(dc.df_fit_stats)
+                  col1  col2
+            mean   2.5   0.0
+            max    4.0   0.0
+
         '''
         assert isinstance(self.stats, list) and len(self.stats) >= 1
         if not isinstance(df, pd.DataFrame):
@@ -168,8 +214,37 @@ class DiffChecker():
         self.threshold_df.replace(self.threshold_df, np.NaN, inplace=True)
 
     def check(self, df_to_check, columns=None, columns_to_exclude=None):
-        '''
-        # TODO: docstring here
+        '''Checks given `df_to_check` based on fitted `df` stats.
+
+        For each column stat pairs, it checks if stat is in given threshold by
+        utilizing `qa_array_statistics <checkers.html#checkers.qa_array_statistics>`_.
+        If any stat qa fails, returns `False`, `True otherwise`.
+
+        Args:
+            df_to_check (pd.DataFrame): data to check
+            columns (None or list): if given, only these columns will be
+                considered for qa
+            columns_to_exclude (None or list): columns to exclude from qa
+
+        Returns:
+            bool: is QA passed or not
+
+        Example:
+            >>> dc = DiffChecker()
+            >>> dc.set_threshold(0.2)
+            >>> dc.set_stats(['mean', 'max'])
+            >>> dc.fit(pd.DataFrame({
+            ...     'col1':[1, 2, 3, 4],
+            ...     'col2':[1]*4}))
+            >>> dc.check(pd.DataFrame({
+            ...     'col1':[1, 2, 3, 4],
+            ...     'col2':[0]*4}))
+            False
+            >>> dc.check(pd.DataFrame({
+            ...     'col1':[1, 2.1, 3.2, 4.2],
+            ...     'col2':[1.1]*4}))
+            True
+
         '''
         assert isinstance(self.stats, list) and len(self.stats) >= 1
         if not isinstance(df_to_check, pd.DataFrame):
@@ -215,12 +290,11 @@ class DiffChecker():
         return all(qa_results)
 
     def to_pickle(self, path='DiffChecker.pkl'):
-        '''
-        Pickle (serialize) object to a file.
+        '''Pickle (serialize) object to a file.
 
         Args:
-            path: str, file path where the pickled object
-                will be stored
+            path (str): file path where the pickled object will be stored
+
         '''
         self._method_init_logger(locals())
         self.logger = None
@@ -228,13 +302,13 @@ class DiffChecker():
         pickle.dump(self, output, -1)
         output.close()
 
-    def _method_init_logger(self, args, exclude=('self')):
-        '''
-        Logs method initiation with given arguments.
+    def _method_init_logger(self, args, exclude=['self']):
+        '''Logs method initiation with given arguments.
 
         Args:
-            args: local arguments, i.e. `locals()`
-            exclude: arguments to exclude, e.g. `self`
+            args (dict): local arguments, i.e. `locals()`
+            exclude (list): arguments to exclude, e.g. `self`
+
         '''
         if self.logger and self.log_info:
             method_name = sys._getframe(1).f_code.co_name
@@ -242,3 +316,7 @@ class DiffChecker():
             for k, v in args.items():
                 if k not in exclude:
                     self.logger.info(method_name+' locals: '+k+'='+str(v)[:100])
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

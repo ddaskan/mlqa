@@ -5,7 +5,7 @@ from itertools import combinations
 import pandas as pd
 
 def qa_outliers(data, std, logger=None, log_level=30):
-    '''QA check for outliers as wrapper of `qa_outliers_1d`.
+    '''QA check for outliers as wrapper of `qa_outliers_1d <#checkers.qa_outliers_1d>`_.
 
     If there are values in the `data` outside of [mean-`std`, mean+`std`]
     range, returns `False`, otherwise `True`. If a pd.DataFrame given, then it
@@ -27,6 +27,9 @@ def qa_outliers(data, std, logger=None, log_level=30):
         False
         >>> qa_outliers([1, 2, 3, 4], std=3)
         True
+
+    See Also:
+        `qa_outliers_1d <#checkers.qa_outliers_1d>`_: same but only for 1d
 
     '''
     if isinstance(data, pd.DataFrame):
@@ -67,6 +70,9 @@ def qa_outliers_1d(
         >>> qa_outliers_1d([1, 2, 3, 4], std=3)
         True
 
+    See Also:
+        `qa_outliers <#checkers.qa_outliers>`_: wrapper to be used in pd.DataFrame
+
     '''
     iter(array)
 
@@ -100,7 +106,7 @@ def qa_outliers_1d(
 def qa_missing_values(
         data, n=None, frac=None, threshold=.1, limit=(False, True),
         logger=None, log_level=30):
-    '''QA check for missing values as wrapper of `qa_missing_values_1d` to
+    '''QA check for missing values as wrapper of `qa_missing_values_1d <#checkers.qa_missing_values_1d>`_ to
     also use in pd.DataFrame.
 
     If array na count is within given condition, returns `True`, `False`
@@ -118,6 +124,9 @@ def qa_missing_values(
 
     Returns:
         bool: is QA passed or not
+
+    See Also:
+        `qa_missing_values_1d <#checkers.qa_missing_values_1d>`_: same but only for 1d
 
     '''
     if isinstance(data, pd.DataFrame):
@@ -164,6 +173,9 @@ def qa_missing_values_1d(
         >>> qa_missing_values_1d([1, None, None, None], n=2, threshold=0.5)
         True
 
+    See Also:
+        `qa_missing_values <#checkers.qa_missing_values>`_: wrapper to be used in pd.DataFrame
+
     '''
     if n is None and frac is None:
         raise TypeError('`n` or `frac` must be given')
@@ -208,7 +220,7 @@ def qa_df_set(
         logger=None, name=None):
     '''Wrapper for `qa_df_pair()` to apply 2 length subsequences of `dfs`.
 
-    QA datasets' statistics by utilizing describe() method of pd.DataFrame. 
+    QA datasets' statistics by utilizing describe() method of pd.DataFrame.
     Ignores non-numeric columns.
 
     Args:
@@ -219,12 +231,12 @@ def qa_df_set(
             handle division errors or extreme values
         ignore_max (None or float): ignore stats greater or equal than this to
             handle extreme values
-        stats_to_exclude (None or list): statistics to exclude as list of 
+        stats_to_exclude (None or list): statistics to exclude as list of
             strings, e.g. ['count', 'mean', 'std', 'min', '25%', '50%',
             '75%', 'max']
         columns_to_exclude (None or list): columns to exclude as list of strings
-        error_columns (None or list): error columns for error, if given, then 
-            test results for non error columns would be ignored. Only these 
+        error_columns (None or list): error columns for error, if given, then
+            test results for non error columns would be ignored. Only these
             columns are logged with level 40.
         logger (logging.Logger or None): Python logging object
             https://docs.python.org/3/library/logging.html#logging.Logger
@@ -232,6 +244,9 @@ def qa_df_set(
 
     Returns:
         bool: is QA passed or not
+
+    See Also:
+        `qa_df_pair <#checkers.qa_df_pair>`_: same but only for 2 pd.DataFrame
 
     '''
     if not all([isinstance(df, pd.DataFrame) for df in dfs]):
@@ -253,7 +268,7 @@ def qa_df_pair(
         df1, df2, threshold=.1, ignore_min=None, ignore_max=None,
         stats_to_exclude=None, columns_to_exclude=None, error_columns=None,
         logger=None, name=None):
-    '''QA two datasets' statistics by utilizing describe() method of 
+    '''QA two datasets' statistics by utilizing describe() method of
     pd.DataFrame. Ignores non-numeric columns.
 
     Args:
@@ -265,12 +280,12 @@ def qa_df_pair(
             handle division errors or extreme values
         ignore_max (None or float): ignore stats greater or equal than this to
             handle extreme values
-        stats_to_exclude (None or list): statistics to exclude as list of 
+        stats_to_exclude (None or list): statistics to exclude as list of
             strings, e.g. ['count', 'mean', 'std', 'min', '25%', '50%',
             '75%', 'max']
         columns_to_exclude (None or list): columns to exclude as list of strings
-        error_columns (None or list): error columns for error, if given, then 
-            test results for non error columns would be ignored. Only these 
+        error_columns (None or list): error columns for error, if given, then
+            test results for non error columns would be ignored. Only these
             columns are logged with level 40.
         logger (logging.Logger or None): Python logging object
             https://docs.python.org/3/library/logging.html#logging.Logger
@@ -278,6 +293,9 @@ def qa_df_pair(
 
     Returns:
         bool: is QA passed or not
+
+    See Also:
+        `qa_df_set <#checkers.qa_df_set>`_: wrapper to use more than 2 pd.DataFrame
 
     '''
     if not (isinstance(df1, pd.DataFrame) and isinstance(df2, pd.DataFrame)):
@@ -355,14 +373,14 @@ def qa_df_pair(
 def qa_preds(preds, warn_range, error_range=None, logger=None, name=None):
     '''Wrapper for `qa_array_statistics` for stats `min` and `max` only.
 
-    It should be mainly used to also log QA steps and prediction statistics. 
-    Use `qa_array_statistics` for detailed QA on prediction array.
+    It should be mainly used to also log QA steps and prediction statistics.
+    Use `qa_array_statistics <#checkers.qa_array_statistics>`_ for detailed QA on prediction array.
 
     Args:
         preds: array, shape (n_samples, 1)
         warn_range (iter): 2 elements iterable, e.g. [min, max] to warn
         error_range (iter or None): 2 elements iterable or None, e.g. [min, max]
-            for error, should involve warn_range. If not None, QA result by 
+            for error, should involve warn_range. If not None, QA result by
             `warn_range` is ignored.
         logger (logging.Logger or None): Python logging object
             https://docs.python.org/3/library/logging.html#logging.Logger
@@ -428,7 +446,7 @@ def qa_category_distribution_on_value(
     Gender
 
     Args:
-        df (pd.DataFrame): input data 
+        df (pd.DataFrame): input data
         category_column_name (str): column name for the category,
             (e.g. 'Gender')
         distribution (dict): expected value distribution of the category
@@ -656,4 +674,3 @@ def na_rate(array):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
