@@ -2,6 +2,7 @@
 This module is for DiffChecker class.
 '''
 import sys
+import os
 import logging
 from importlib import reload
 import pickle
@@ -13,6 +14,8 @@ from mlqa import checkers as ch
 class DiffChecker():
     '''Integrated QA performer on pd.DataFrame with logging functionality.
 
+    It only works in numerical columns.
+
     Args:
         qa_level (str): quick set for QA level, can be one of ['loose', 'mid', 'strict']
         logger (str or logging.Logger): 'print' for print only, every other
@@ -21,6 +24,32 @@ class DiffChecker():
         qa_log_level (int): qa message logging level
         log_info (bool): `True` if method calls or arguments also need to be
             logged
+
+    Example:
+        >>> dc = DiffChecker()
+        >>> dc.fit(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*50+[1]*50}))
+        >>> dc.check(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*70+[1]*30}))
+        True
+        >>> dc.set_threshold(0.1)
+        >>> dc.check(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*70+[1]*30}))
+        False
+
+        >>> dc = DiffChecker()
+        >>> dc.threshold
+        0.5
+        >>> dc = DiffChecker(qa_level='mid')
+        >>> dc.threshold
+        0.2
+        >>> dc = DiffChecker(qa_level='strict')
+        >>> dc.threshold
+        0.1
+
+        >>> dc = DiffChecker(logger='mylog.log')
+        >>> dc.fit(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*50+[1]*50}))
+        >>> dc.set_threshold(0.1)
+        >>> dc.check(pd.DataFrame({'mean_col':[1, 1.5]*50, 'na_col':[None]*70+[1]*30}))
+        False
+        >>> os.remove('mylog.log')
 
     '''
     stats = []
@@ -232,17 +261,11 @@ class DiffChecker():
         Example:
             >>> dc = DiffChecker()
             >>> dc.set_threshold(0.2)
-            >>> dc.set_stats(['mean', 'max'])
-            >>> dc.fit(pd.DataFrame({
-            ...     'col1':[1, 2, 3, 4],
-            ...     'col2':[1]*4}))
-            >>> dc.check(pd.DataFrame({
-            ...     'col1':[1, 2, 3, 4],
-            ...     'col2':[0]*4}))
+            >>> dc.set_stats(['mean', 'max', np.sum])
+            >>> dc.fit(pd.DataFrame({'col1':[1, 2, 3, 4], 'col2':[1]*4}))
+            >>> dc.check(pd.DataFrame({'col1':[1, 2, 3, 4], 'col2':[0]*4}))
             False
-            >>> dc.check(pd.DataFrame({
-            ...     'col1':[1, 2.1, 3.2, 4.2],
-            ...     'col2':[1.1]*4}))
+            >>> dc.check(pd.DataFrame({'col1':[1, 2.1, 3.2, 4.2], 'col2':[1.1]*4}))
             True
 
         '''
@@ -294,6 +317,17 @@ class DiffChecker():
 
         Args:
             path (str): file path where the pickled object will be stored
+
+        Example:
+            >>> dc1 = DiffChecker()
+            >>> dc1.fit(pd.DataFrame({'col1':[1, 2, 3, 4], 'col2':[0]*4}))
+            >>> dc1.to_pickle(path='DiffChecker.pkl')
+            >>> # to load the same object later
+            >>> import pickle
+            >>> pkl_file = open('DiffChecker.pkl', 'rb')
+            >>> dc2 = pickle.load(pkl_file)
+            >>> pkl_file.close()
+            >>> os.remove('DiffChecker.pkl')
 
         '''
         self._method_init_logger(locals())
