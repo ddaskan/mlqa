@@ -26,6 +26,8 @@ class DiffChecker():
             logged
 
     Example:
+        Basic usage:
+
         >>> dc = DiffChecker()
         >>> dc.fit(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*50+[1]*50}))
         >>> dc.check(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*70+[1]*30}))
@@ -33,6 +35,8 @@ class DiffChecker():
         >>> dc.set_threshold(0.1)
         >>> dc.check(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*70+[1]*30}))
         False
+
+        Quick set for `qa_level`:
 
         >>> dc = DiffChecker()
         >>> dc.threshold
@@ -43,6 +47,8 @@ class DiffChecker():
         >>> dc = DiffChecker(qa_level='strict')
         >>> dc.threshold
         0.1
+
+        Logger can also be initiated:
 
         >>> dc = DiffChecker(logger='mylog.log')
         >>> dc.fit(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*50+[1]*50}))
@@ -319,10 +325,14 @@ class DiffChecker():
             path (str): file path where the pickled object will be stored
 
         Example:
+            To save a `*.pkl` file:
+
             >>> dc1 = DiffChecker()
             >>> dc1.fit(pd.DataFrame({'col1':[1, 2, 3, 4], 'col2':[0]*4}))
             >>> dc1.to_pickle(path='DiffChecker.pkl')
-            >>> # to load the same object later
+
+            To load the same object later:
+
             >>> import pickle
             >>> pkl_file = open('DiffChecker.pkl', 'rb')
             >>> dc2 = pickle.load(pkl_file)

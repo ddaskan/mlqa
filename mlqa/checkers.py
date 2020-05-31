@@ -23,10 +23,23 @@ def qa_outliers(data, std, logger=None, log_level=30):
         bool: is QA passed or not
 
     Example:
+        Check for 1d:
+
         >>> qa_outliers([1, 2, 3, 4], std=0.1)
         False
         >>> qa_outliers([1, 2, 3, 4], std=3)
         True
+
+        Check for pd.DataFrame:
+
+        >>> import numpy as np
+        >>> import pandas as pd
+        >>> np.random.seed(123)
+        >>> df = pd.DataFrame({
+        ...     'col1':np.random.normal(0, 0.1, 100),
+        ...     'col2':np.random.normal(0, 1.0, 100)})
+        >>> qa_outliers(df, std=0.5)
+        False
 
     See Also:
         `qa_outliers_1d <#checkers.qa_outliers_1d>`_: same but only for 1d
@@ -245,6 +258,12 @@ def qa_df_set(
     Returns:
         bool: is QA passed or not
 
+    Example:
+        >>> df1 = pd.DataFrame({'col1':[1, 2]*10, 'col2':[0, 4]*10})
+        >>> df2 = pd.DataFrame({'col1':[1, 9]*10, 'col2':[0, -4]*10})
+        >>> qa_df_set([df1, df2])
+        False
+
     See Also:
         `qa_df_pair <#checkers.qa_df_pair>`_: same but only for 2 pd.DataFrame
 
@@ -305,7 +324,7 @@ def qa_df_pair(
     if name:
         details += ' for ' + name
     if logger:
-        logger.info('train/test sets QA initiated with threshold ' + details)
+        logger.info('df sets QA initiated with threshold ' + details)
 
     df1_describe = df1.describe()
     df2_describe = df2.describe()
@@ -364,7 +383,7 @@ def qa_df_pair(
                         logger.log(30, msg)
 
     if logger:
-        logger.info('train/test sets QA done with threshold ' + details)
+        logger.info('df sets QA done with threshold ' + details)
 
     if error_columns:
         return all(error_results)

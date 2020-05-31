@@ -240,7 +240,7 @@ class TestCheckers(unittest.TestCase):
         self.assertEqual(
             log.output,
             [
-                'INFO:test_mlqa:train/test sets QA initiated with threshold 0.2',
+                'INFO:test_mlqa:df sets QA initiated with threshold 0.2',
                 'WARNING:test_mlqa:mean of Survived not passed. Values are 0.41 and 0.28',
                 'WARNING:test_mlqa:std of Parents/Children Aboard not passed.'
                 ' Values are 0.96735 and 0.76877',
@@ -251,7 +251,7 @@ class TestCheckers(unittest.TestCase):
                 ' Values are 0.0 and 1.0',
                 'WARNING:test_mlqa:max of Siblings/Spouses Aboard not passed.'
                 ' Values are 5.0 and 8.0',
-                'INFO:test_mlqa:train/test sets QA done with threshold 0.2',
+                'INFO:test_mlqa:df sets QA done with threshold 0.2',
             ])
 
         self.assertTrue(
