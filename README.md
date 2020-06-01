@@ -9,6 +9,7 @@
  ## Installation
 
  You can install MLQA with pip.
+ 
  `pip install mlqa`
 
  MLQA depends on Pandas and Numpy and works in Python 3.5+.
@@ -30,7 +31,7 @@ Then, you can check on new data if it's okay for given criteria. Below, you can 
 True
 ```
 
-See more examples at [Documentation/Quickstart](link-here). You can also read the full documentation [here](link-here).
+See more examples at [Documentation/Quickstart](http://www.doganaskan.com/mlqa/source/quickstart.html). You can also read the full documentation [here](http://www.doganaskan.com/mlqa/).
 
 ## Tests
 Tests are written with [unittest](https://docs.python.org/3/library/unittest.html) and can be located in the [tests](tests/) folder. There are also some tests in docstring to be run by [doctest](https://docs.python.org/3/library/doctest.html).
