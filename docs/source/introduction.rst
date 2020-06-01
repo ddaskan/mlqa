@@ -13,14 +13,6 @@ You can install MLQA with pip.
 
 .. code-block::
 
-	$ pip install mlqa
-
-Or, from the source.
-
-.. code-block::
-
-	$ git clone https://github.com/ddaskan/mlqa.git
-	$ python -m unittest discover
-	$ python setup.py
+	pip install mlqa
 
 MLQA depends on Pandas and Numpy.
