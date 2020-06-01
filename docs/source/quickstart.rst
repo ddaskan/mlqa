@@ -15,7 +15,7 @@ You can easily initiate the object and fit a pd.DataFrame.
 	>>> dc = DiffChecker()
 	>>> dc.fit(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*50+[1]*50}))
 
-Then, you can check on new data if it's okay for given criteria. Below, you can see data with increased NA count in column `na_col`. The default threshold is 0.5 which means it should be okay if NA rate is 50% more than fitted data. NA rate is 50% in the fitted data so up to 75% (i.e. 50*(1+0.5)) should be okay. NA rate is 70% in the new data and, as expected, the QA passes. 
+Then, you can check on new data if it's okay for given criteria. Below, you can see data with increased NA count in column `na_col`. The default threshold is 0.5 which means it should be okay if NA rate is 50% more than the fitted data. NA rate is 50% in the fitted data so up to 75% (i.e. 50*(1+0.5)) should be okay. NA rate is 70% in the new data and, as expected, the QA passes. 
 
 .. code-block:: python
 
@@ -126,6 +126,74 @@ Checkers with Logging
 ---------------------
 
 There are also `checkers <checkers.html>`_ to provide other kind of QA functionalities such as `outliers detection <checkers.html#checkers.qa_outliers>`_, `pd.DataFrame comparison <checkers.html#checkers.qa_df_set>`_ or some `categorical value QA <checkers.html#checkers.qa_category_distribution_on_value>`_. You can use these individually or combining with `DiffChecker <identifiers.html#identifiers.DiffChecker>`_'s logger.
+
+Let's say you initiated `DiffChecker <identifiers.html#identifiers.DiffChecker>`_ with some logger already.
+
+.. code-block:: python
+
+	>>> dc = DiffChecker(logger='mylog.log')
+
+Then, you can just pass `logger` attribute of the object when calling `checkers <checkers.html>`_. Here is an example of `qa_outliers <checkers.html#checkers.qa_outliers>`_.
+
+.. code-block:: python
+
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> np.random.seed(123)
+    >>> df = pd.DataFrame({'col1':np.random.normal(0, 0.1, 100), 'col2':np.random.normal(0, 1.0, 100)})
+    >>> ch.qa_outliers(df, std=0.5, logger=dc.logger)
+    False
+
+This should log something like below.
+
+.. code-block::
+
+	WARNING|2020-05-31 17:54:13,426|70 outliers detected within inlier range (i.e. [-0.053985309527773806, 0.059407124225845764]) for col1
+	WARNING|2020-05-31 17:54:13,428|53 outliers detected within inlier range (i.e. [-0.5070058315486367, 0.46793470772834406]) for col2
+
+You can also compare multiple datasets from the same population with `qa_df_set <checkers.html#checkers.qa_df_set>`_.
+
+.. code-block:: python
+
+    >>> df1 = pd.DataFrame({'col1':[1, 2]*10, 'col2':[0, 4]*10})
+    >>> df2 = pd.DataFrame({'col1':[1, 9]*10, 'col2':[0, -4]*10})
+    >>> ch.qa_df_set([df1, df2], logger=dc.logger)
+    False
+
+This should log something like below.
+
+.. code-block::
+
+	INFO|2020-05-31 18:09:47,581|df sets QA initiated with threshold 0.1
+	WARNING|2020-05-31 18:09:47,598|mean of col1 not passed. Values are 1.5 and 5.0
+	WARNING|2020-05-31 18:09:47,599|mean of col2 not passed. Values are 2.0 and -2.0
+	WARNING|2020-05-31 18:09:47,599|std of col1 not passed. Values are 0.51299 and 4.10391
+	WARNING|2020-05-31 18:09:47,599|min of col2 not passed. Values are 0.0 and -4.0
+	WARNING|2020-05-31 18:09:47,599|25% of col2 not passed. Values are 0.0 and -4.0
+	WARNING|2020-05-31 18:09:47,599|50% of col1 not passed. Values are 1.5 and 5.0
+	WARNING|2020-05-31 18:09:47,600|50% of col2 not passed. Values are 2.0 and -2.0
+	WARNING|2020-05-31 18:09:47,600|75% of col1 not passed. Values are 2.0 and 9.0
+	WARNING|2020-05-31 18:09:47,600|75% of col2 not passed. Values are 4.0 and 0.0
+	WARNING|2020-05-31 18:09:47,600|max of col1 not passed. Values are 2.0 and 9.0
+	WARNING|2020-05-31 18:09:47,600|max of col2 not passed. Values are 4.0 and 0.0
+	INFO|2020-05-31 18:09:47,600|df sets QA done with threshold 0.1
+
+For categorical values, you can check its distribution on a numeric column with `qa_category_distribution_on_value <checkers.html#checkers.qa_category_distribution_on_value>`_.
+
+.. code-block:: python
+
+        >>> df1 = pd.DataFrame({'Gender': ['Male', 'Male', 'Female', 'Female'],'Weight': [200, 250, 100, 125]})
+        >>> ch.qa_category_distribution_on_value(df1, 'Gender', {'Male':.5, 'Female':.5}, 'Weight', logger=dc.logger)
+        False
+
+This should log something like below.
+
+.. code-block::
+
+	WARNING|2020-05-31 18:21:20,019|Gender distribution looks wrong, check Weight for Gender=Male. Expected=0.5, Actual=0.6666666666666666
+	WARNING|2020-05-31 18:21:20,019|Gender distribution looks wrong, check Weight for Gender=Female. Expected=0.5, Actual=0.3333333333333333
+
+NOTE: sorry for the long lines, I had to write like that because of a `bug <https://github.com/executablebooks/sphinx-copybutton/issues/65>`_ in `sphinx-copybutton` extension.
 
 
 
