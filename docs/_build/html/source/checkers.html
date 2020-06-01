@@ -1,0 +1,650 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>mlqa.checkers &#8212; mlqa 0.1.0 documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="mlqa.identifiers" href="identifiers.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/mlqa.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="introduction.html">Introduction</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="quickstart.html">Quickstart</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="">mlqa.checkers</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="identifiers.html">mlqa.identifiers</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/ddaskan/mlqa/" target="_blank" rel="noopener">
+              <span><i class="fab fa-github-square"></i></span>
+            </a>
+          </li>
+        
+        
+          <li class="nav-item">
+            <a class="nav-link" href="https://twitter.com/_DoganAskan" target="_blank" rel="noopener">
+              <span><i class="fab fa-twitter-square"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+        
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/ddaskan/mlqa/edit/master/docs/source/checkers.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="module-checkers">
+<span id="mlqa-checkers"></span><h1>mlqa.checkers<a class="headerlink" href="#module-checkers" title="Permalink to this headline">¶</a></h1>
+<p>This module includes individual QA functions of mlqa.</p>
+<dl class="py function">
+<dt id="checkers.qa_outliers">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">qa_outliers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">std</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">30</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L7-L59"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.qa_outliers" title="Permalink to this definition">¶</a></dt>
+<dd><p>QA check for outliers as wrapper of <a class="reference external" href="#checkers.qa_outliers_1d">qa_outliers_1d</a>.</p>
+<p>If there are values in the <cite>data</cite> outside of [mean-<cite>std</cite>, mean+`std`]
+range, returns <cite>False</cite>, otherwise <cite>True</cite>. If a pd.DataFrame given, then it
+checks each column individually.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pd.DataFrame</em><em> or </em><em>iter</em>) – data to check</p></li>
+<li><p><strong>std</strong> (<em>list</em><em> or </em><em>float</em>) – distance from mean for outliers, can be 2 elements
+iterable for different lower and upper bounds</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em> or </em><em>None</em>) – Python logging object
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger">https://docs.python.org/3/library/logging.html#logging.Logger</a></p></li>
+<li><p><strong>log_level</strong> (<em>int</em>) – <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging-levels">https://docs.python.org/3/library/logging.html#logging-levels</a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is QA passed or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Check for 1d:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qa_outliers</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">std</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_outliers</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">std</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Check for pd.DataFrame:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;col1&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="s1">&#39;col2&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_outliers</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="#checkers.qa_outliers_1d">qa_outliers_1d</a>: same but only for 1d</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="checkers.qa_outliers_1d">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">qa_outliers_1d</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">array</span></em>, <em class="sig-param"><span class="n">std</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L61-L117"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.qa_outliers_1d" title="Permalink to this definition">¶</a></dt>
+<dd><p>QA check for outliers for 1d iterable.</p>
+<p>If there are values in the <cite>array</cite> outside of [mean-<cite>std</cite>, mean+`std`]
+range, returns <cite>False</cite>, otherwise <cite>True</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>iter</em>) – 1d array to check</p></li>
+<li><p><strong>std</strong> (<em>list</em><em> or </em><em>float</em>) – distance from mean for outliers, can be 2 elements
+iterable for different lower and upper bounds</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em> or </em><em>None</em>) – Python logging object
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger">https://docs.python.org/3/library/logging.html#logging.Logger</a></p></li>
+<li><p><strong>log_level</strong> (<em>int</em>) – <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging-levels">https://docs.python.org/3/library/logging.html#logging-levels</a></p></li>
+<li><p><strong>name</strong> (<em>str</em>) – optional array name for logger</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is QA passed or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qa_outliers_1d</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">std</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_outliers_1d</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">std</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="#checkers.qa_outliers">qa_outliers</a>: wrapper to be used in pd.DataFrame</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="checkers.qa_missing_values">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">qa_missing_values</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">n</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">frac</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">False, True</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">30</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L119-L157"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.qa_missing_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>QA check for missing values as wrapper of <a class="reference external" href="#checkers.qa_missing_values_1d">qa_missing_values_1d</a> to
+also use in pd.DataFrame.</p>
+<p>If array na count is within given condition, returns <cite>True</cite>, <cite>False</cite>
+otherwise. If a pd.DataFrame given, then it checks each column individually.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pd.DataFrame</em><em> or </em><em>iter</em>) – data to check</p></li>
+<li><p><strong>n</strong> (<em>int</em><em> or </em><em>None</em>) – expected missing value count</p></li>
+<li><p><strong>frac</strong> (<em>float</em><em> or </em><em>None</em>) – expected missing value percentage</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – percentage threshold for upper or lower limit</p></li>
+<li><p><strong>limit</strong> (<em>tuple</em>) – limit direction, which side of na limit to check</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em> or </em><em>None</em>) – Python logging object
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger">https://docs.python.org/3/library/logging.html#logging.Logger</a></p></li>
+<li><p><strong>log_level</strong> (<em>int</em>) – <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging-levels">https://docs.python.org/3/library/logging.html#logging-levels</a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is QA passed or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="#checkers.qa_missing_values_1d">qa_missing_values_1d</a>: same but only for 1d</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="checkers.qa_missing_values_1d">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">qa_missing_values_1d</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">array</span></em>, <em class="sig-param"><span class="n">n</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">frac</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">False, True</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L159-L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.qa_missing_values_1d" title="Permalink to this definition">¶</a></dt>
+<dd><p>QA check for missing values of 1D array.</p>
+<p>If array na count is within given condition, returns <cite>True</cite>, <cite>False</cite>
+otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>iter</em>) – 1d array to check</p></li>
+<li><p><strong>n</strong> (<em>int</em><em> or </em><em>None</em>) – expected missing value count</p></li>
+<li><p><strong>frac</strong> (<em>float</em><em> or </em><em>None</em>) – expected missing value percentage</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – percentage threshold for upper or lower limit</p></li>
+<li><p><strong>limit</strong> (<em>tuple</em>) – limit direction, which side of na limit to check</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em> or </em><em>None</em>) – Python logging object
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger">https://docs.python.org/3/library/logging.html#logging.Logger</a></p></li>
+<li><p><strong>log_level</strong> (<em>int</em>) – <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging-levels">https://docs.python.org/3/library/logging.html#logging-levels</a></p></li>
+<li><p><strong>name</strong> (<em>str</em>) – optional array name for logger</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is QA passed or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qa_missing_values_1d</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_missing_values_1d</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_missing_values_1d</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="#checkers.qa_missing_values">qa_missing_values</a>: wrapper to be used in pd.DataFrame</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="checkers.qa_df_set">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">qa_df_set</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dfs</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">ignore_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ignore_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stats_to_exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns_to_exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">error_columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L230-L284"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.qa_df_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for <cite>qa_df_pair()</cite> to apply 2 length subsequences of <cite>dfs</cite>.</p>
+<p>QA datasets’ statistics by utilizing describe() method of pd.DataFrame.
+Ignores non-numeric columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dfs</strong> (<em>iter</em>) – set of pd.DataFrame</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – percentage threshold for absolute percentage error
+between statistics</p></li>
+<li><p><strong>ignore_min</strong> (<em>None</em><em> or </em><em>float</em>) – ignore stats less or equal than this to
+handle division errors or extreme values</p></li>
+<li><p><strong>ignore_max</strong> (<em>None</em><em> or </em><em>float</em>) – ignore stats greater or equal than this to
+handle extreme values</p></li>
+<li><p><strong>stats_to_exclude</strong> (<em>None</em><em> or </em><em>list</em>) – statistics to exclude as list of
+strings, e.g. [‘count’, ‘mean’, ‘std’, ‘min’, ‘25%’, ‘50%’,
+‘75%’, ‘max’]</p></li>
+<li><p><strong>columns_to_exclude</strong> (<em>None</em><em> or </em><em>list</em>) – columns to exclude as list of strings</p></li>
+<li><p><strong>error_columns</strong> (<em>None</em><em> or </em><em>list</em>) – error columns for error, if given, then
+test results for non error columns would be ignored. Only these
+columns are logged with level 40.</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em> or </em><em>None</em>) – Python logging object
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger">https://docs.python.org/3/library/logging.html#logging.Logger</a></p></li>
+<li><p><strong>name</strong> (<em>str</em>) – optional array name for logger</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is QA passed or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_df_set</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">])</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="#checkers.qa_df_pair">qa_df_pair</a>: same but only for 2 pd.DataFrame</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="checkers.qa_df_pair">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">qa_df_pair</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df1</span></em>, <em class="sig-param"><span class="n">df2</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">ignore_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ignore_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stats_to_exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns_to_exclude</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">error_columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L286-L390"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.qa_df_pair" title="Permalink to this definition">¶</a></dt>
+<dd><p>QA two datasets’ statistics by utilizing describe() method of
+pd.DataFrame. Ignores non-numeric columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df1</strong> (<em>pd.DataFrame</em>) – test dataframe</p></li>
+<li><p><strong>df2</strong> (<em>pd.DataFrame</em>) – test dataframe</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – percentage threshold for absolute percentage error
+between statistics</p></li>
+<li><p><strong>ignore_min</strong> (<em>None</em><em> or </em><em>float</em>) – ignore stats less or equal than this to
+handle division errors or extreme values</p></li>
+<li><p><strong>ignore_max</strong> (<em>None</em><em> or </em><em>float</em>) – ignore stats greater or equal than this to
+handle extreme values</p></li>
+<li><p><strong>stats_to_exclude</strong> (<em>None</em><em> or </em><em>list</em>) – statistics to exclude as list of
+strings, e.g. [‘count’, ‘mean’, ‘std’, ‘min’, ‘25%’, ‘50%’,
+‘75%’, ‘max’]</p></li>
+<li><p><strong>columns_to_exclude</strong> (<em>None</em><em> or </em><em>list</em>) – columns to exclude as list of strings</p></li>
+<li><p><strong>error_columns</strong> (<em>None</em><em> or </em><em>list</em>) – error columns for error, if given, then
+test results for non error columns would be ignored. Only these
+columns are logged with level 40.</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em> or </em><em>None</em>) – Python logging object
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger">https://docs.python.org/3/library/logging.html#logging.Logger</a></p></li>
+<li><p><strong>name</strong> (<em>str</em>) – optional array name for logger</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is QA passed or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="#checkers.qa_df_set">qa_df_set</a>: wrapper to use more than 2 pd.DataFrame</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="checkers.qa_preds">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">qa_preds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preds</span></em>, <em class="sig-param"><span class="n">warn_range</span></em>, <em class="sig-param"><span class="n">error_range</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L392-L458"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.qa_preds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for <cite>qa_array_statistics</cite> for stats <cite>min</cite> and <cite>max</cite> only.</p>
+<p>It should be mainly used to also log QA steps and prediction statistics.
+Use <a class="reference external" href="#checkers.qa_array_statistics">qa_array_statistics</a> for detailed QA on prediction array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>preds</strong> – array, shape (n_samples, 1)</p></li>
+<li><p><strong>warn_range</strong> (<em>iter</em>) – 2 elements iterable, e.g. [min, max] to warn</p></li>
+<li><p><strong>error_range</strong> (<em>iter</em><em> or </em><em>None</em>) – 2 elements iterable or None, e.g. [min, max]
+for error, should involve warn_range. If not None, QA result by
+<cite>warn_range</cite> is ignored.</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em> or </em><em>None</em>) – Python logging object
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger">https://docs.python.org/3/library/logging.html#logging.Logger</a>
+If <cite>None</cite> given, no practical use of this function. Use
+<cite>qa_array_statistics</cite> instead.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – optional array name for logger</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is QA passed or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qa_preds</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">warn_range</span><span class="o">=</span><span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_preds</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">warn_range</span><span class="o">=</span><span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">error_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">])</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="checkers.qa_category_distribution_on_value">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">qa_category_distribution_on_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">category_column_name</span></em>, <em class="sig-param"><span class="n">distribution</span></em>, <em class="sig-param"><span class="n">value_column_name</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">30</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L460-L539"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.qa_category_distribution_on_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>QA check for the distribution of category-value pairs in a pd.DataFrame.</p>
+<p>Gender</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – input data</p></li>
+<li><p><strong>category_column_name</strong> (<em>str</em>) – column name for the category,
+(e.g. ‘Gender’)</p></li>
+<li><p><strong>distribution</strong> (<em>dict</em>) – expected value distribution of the category
+(e.g. {‘Male’:.05, ‘Female’:.14, ‘Undefined’:.81})</p></li>
+<li><p><strong>value_column_name</strong> (<em>str</em>) – numeric column name to check distribution,
+(e.g. ‘Weight’)</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – percentage threshold for absolute percentage error</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em> or </em><em>None</em>) – Python logging object
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger">https://docs.python.org/3/library/logging.html#logging.Logger</a></p></li>
+<li><p><strong>log_level</strong> (<em>int</em>) – <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging-levels">https://docs.python.org/3/library/logging.html#logging-levels</a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is QA passed or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Gender&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Male&#39;</span><span class="p">,</span> <span class="s1">&#39;Male&#39;</span><span class="p">,</span> <span class="s1">&#39;Female&#39;</span><span class="p">,</span> <span class="s1">&#39;Female&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="s1">&#39;Weight&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">125</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_category_distribution_on_value</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span>
+<span class="gp">... </span>                                  <span class="s1">&#39;Gender&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                  <span class="p">{</span><span class="s1">&#39;Male&#39;</span><span class="p">:</span><span class="o">.</span><span class="mi">66</span><span class="p">,</span> <span class="s1">&#39;Female&#39;</span><span class="p">:</span><span class="o">.</span><span class="mi">33</span><span class="p">},</span>
+<span class="gp">... </span>                                  <span class="s1">&#39;Weight&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                  <span class="mf">0.1</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_category_distribution_on_value</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span>
+<span class="gp">... </span>                                  <span class="s1">&#39;Gender&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                  <span class="p">{</span><span class="s1">&#39;Male&#39;</span><span class="p">:</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;Female&#39;</span><span class="p">:</span><span class="o">.</span><span class="mi">5</span><span class="p">},</span>
+<span class="gp">... </span>                                  <span class="s1">&#39;Weight&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                  <span class="mf">0.1</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_category_distribution_on_value</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span>
+<span class="gp">... </span>                                  <span class="s1">&#39;Gender&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                  <span class="p">{</span><span class="s1">&#39;Male&#39;</span><span class="p">:</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;Female&#39;</span><span class="p">:</span><span class="o">.</span><span class="mi">5</span><span class="p">},</span>
+<span class="gp">... </span>                                  <span class="s1">&#39;Weight&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                  <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="checkers.qa_preds_by_metric">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">qa_preds_by_metric</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y_true</span></em>, <em class="sig-param"><span class="n">y_pred</span></em>, <em class="sig-param"><span class="n">metric</span></em>, <em class="sig-param"><span class="n">check_range</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">30</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L541-L576"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.qa_preds_by_metric" title="Permalink to this definition">¶</a></dt>
+<dd><p>QA check for model’s predictions by selected metric (e.g. R2, AUC).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_true</strong> (<em>iter</em>) – shape (n_samples, 1)</p></li>
+<li><p><strong>y_pred</strong> (<em>iter</em>) – shape (n_samples, 1)</p></li>
+<li><p><strong>metric</strong> (<em>func</em>) – sklearn like metric function.
+<a class="reference external" href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics">https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics</a></p></li>
+<li><p><strong>check_range</strong> (<em>list</em>) – list of 2 float, i.e. [<cite>lower_limit</cite>, <cite>upper_limit</cite>],
+either of elements can be <cite>None</cite> if no limit is set for that direction.</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em> or </em><em>None</em>) – Python logging object
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger">https://docs.python.org/3/library/logging.html#logging.Logger</a></p></li>
+<li><p><strong>log_level</strong> (<em>int</em>) – <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging-levels">https://docs.python.org/3/library/logging.html#logging-levels</a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is QA passed or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y_true</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mae</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_preds_by_metric</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">mae</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_preds_by_metric</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">mae</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">])</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_preds_by_metric</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">mae</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="checkers.qa_array_statistics">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">qa_array_statistics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">array</span></em>, <em class="sig-param"><span class="n">stats</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L578-L625"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.qa_array_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>QA check for 1D array statistics such as mean, count.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>iter</em>) – shape (n_samples, 1)</p></li>
+<li><p><strong>stats</strong> (<em>dict</em>) – stats to qa
+(e.g. {‘mean’:[0.1, 0.99], ‘count’:[100, None]}(
+Options for keys are [‘mean’, ‘min’, ‘max’, ‘sum’, ‘count’, ‘std’]
+or function such as <cite>np.mean</cite>.</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em> or </em><em>None</em>) – Python logging object
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger">https://docs.python.org/3/library/logging.html#logging.Logger</a></p></li>
+<li><p><strong>log_level</strong> (<em>int</em>) – <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging-levels">https://docs.python.org/3/library/logging.html#logging-levels</a></p></li>
+<li><p><strong>name</strong> (<em>str</em>) – optional array name for logger</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is QA passed or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qa_array_statistics</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;count&#39;</span><span class="p">:[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;min&#39;</span><span class="p">:[</span><span class="kc">None</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">]})</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qa_array_statistics</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;count&#39;</span><span class="p">:[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;max&#39;</span><span class="p">:[</span><span class="kc">None</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">]})</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="checkers.is_value_in_range">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">is_value_in_range</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">check_range</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_msg</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L627-L675"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.is_value_in_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a <cite>value</cite> is in given <cite>check_range</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>) – value to check</p></li>
+<li><p><strong>check_range</strong> (<em>list</em>) – acceptable lower and upper bounds for <cite>value</cite></p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em> or </em><em>None</em>) – Python logging object
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger">https://docs.python.org/3/library/logging.html#logging.Logger</a></p></li>
+<li><p><strong>log_level</strong> (<em>int</em>) – <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging-levels">https://docs.python.org/3/library/logging.html#logging-levels</a></p></li>
+<li><p><strong>log_msg</strong> – str or None, custom log message for <cite>logger</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>is QA passed or not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">is_value_in_range</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_value_in_range</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="checkers.na_rate">
+<code class="sig-prename descclassname">checkers.</code><code class="sig-name descname">na_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">array</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/ddaskan/mlqa/blob/master/mlqa/checkers.py#L677-L691"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#checkers.na_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregate function to calculate na rate in pd.Series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>array</strong> (<em>pd.Series</em>) – input array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>na count / array length</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">na_rate</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="quickstart.html" title="previous page">Quickstart</a>
+    <a class='right-next' id="next-link" href="identifiers.html" title="next page">mlqa.identifiers</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Dogan Askan.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
