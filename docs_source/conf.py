@@ -74,7 +74,7 @@ html_context = {
     "github_user": "ddaskan",
     "github_repo": "mlqa",
     "github_version": "master",
-    "doc_path": "docs",
+    "doc_path": "docs_source",
 }
 
 
