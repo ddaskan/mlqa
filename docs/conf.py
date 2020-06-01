@@ -64,7 +64,7 @@ html_theme_options = {
     # 'github_button': True,
     "github_url": "https://github.com/ddaskan/mlqa/",
     "twitter_url": "https://twitter.com/_DoganAskan",
-    # "google_analytics_id": "UA-XXXXXXX",
+    "google_analytics_id": "UA-100432301-2",
     "navigation_with_keys": True,
     "use_edit_page_button": True,
     # "search_bar_position": "navbar",
