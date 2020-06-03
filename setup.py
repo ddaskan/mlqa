@@ -5,13 +5,21 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="mlqa",
-    version="0.1.0",
+    version="0.1.0.post1",
     author="Dogan Askan",
     author_email="doganaskan@gmail.com",
-    description=" A package to perform QA for Machine Learning Models.",
+    description="A Package to perform QA on data flows in Machine Learning.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ddaskan/mlqa",
+    download_url="https://pypi.python.org/pypi/mlqa",
+    project_urls={
+        "Bug Tracker": "https://github.com/ddaskan/mlqa/issues",
+        "Documentation": "http://www.doganaskan.com/mlqa/",
+        "Source Code": "https://github.com/ddaskan/mlqa",
+    },
+    license='MIT',
+    keywords='qa ml ai data analysis machine learning quality assurance',
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

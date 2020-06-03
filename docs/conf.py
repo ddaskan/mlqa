@@ -25,7 +25,7 @@ copyright = '2020, Dogan Askan'
 author = 'Dogan Askan'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = '0.1.0.post1'
 
 
 # -- General configuration ---------------------------------------------------
@@ -58,6 +58,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # html_theme = 'alabaster'
 html_theme = "pydata_sphinx_theme"
 html_logo = "_static/mlqa.png"
+html_favicon = "_static/favicon/favicon.ico"
 html_theme_options = {
     # 'github_user': 'ddaskan',
     # 'github_repo': 'mlqa',
