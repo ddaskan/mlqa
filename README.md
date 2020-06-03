@@ -1,18 +1,18 @@
 # MLQA <img src="docs/_static/mlqa.png" align="right" width="120"/>
 
- A package to perform QA for Machine Learning Models.
+A Package to perform QA on data flows in Machine Learning.
 
- ## Introduction
+## Introduction
 
- MLQA is a Python package that is created to help data scientists, analysts and developers to perform quality assurance (i.e. QA) on [pandas dataframes](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html) and 1d arrays, especially for machine learning modeling data flows. It's designed to work with [logging](https://docs.python.org/3/library/logging.html) library to log and notify QA steps in a descriptive way.
+MLQA is a Python package that is created to help data scientists, analysts and developers to perform quality assurance (i.e. QA) on [pandas dataframes](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html) and 1d arrays, especially for machine learning modeling data flows. It's designed to work with [logging](https://docs.python.org/3/library/logging.html) library to log and notify QA steps in a descriptive way.
 
- ## Installation
+## Installation
 
- You can install MLQA with pip.
- 
- `pip install mlqa`
+You can install MLQA with pip.
 
- MLQA depends on Pandas and Numpy and works in Python 3.5+.
+`pip install mlqa`
+
+MLQA depends on Pandas and Numpy and works in Python 3.5+.
 
 ## Quickstart
 
