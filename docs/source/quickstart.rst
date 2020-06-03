@@ -125,6 +125,10 @@ If you open `mylog.log`, you'll see something like below.
 
 If you initiate the class with also `log_info=True` argument, then the other class steps (e.g. `set_threshold <identifiers.html#identifiers.DiffChecker.set_threshold>`_, `check <identifiers.html#identifiers.DiffChecker.check>`_) would be logged, too.
 
+.. note::
+
+    Although `DiffChecker <identifiers.html#identifiers.DiffChecker>`_ is able to create a `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_ object by just passing a file name (i.e. `logger='mylog.log'`), creating the `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_ object externally then passing accordingly (i.e. `logger=<mylogger>`) is highly recommended.
+
 Checkers with Logging
 ---------------------
 
@@ -198,7 +202,13 @@ This should log something like below.
 	WARNING|2020-05-31 18:21:20,019|Gender distribution looks wrong, check Weight for Gender=Male. Expected=0.5, Actual=0.6666666666666666
 	WARNING|2020-05-31 18:21:20,019|Gender distribution looks wrong, check Weight for Gender=Female. Expected=0.5, Actual=0.3333333333333333
 
-NOTE: sorry for the long lines, I had to write like that because of a `bug <https://github.com/executablebooks/sphinx-copybutton/issues/65>`_ in `sphinx-copybutton` extension.
+.. note::
+
+    Although `DiffChecker <identifiers.html#identifiers.DiffChecker>`_ is able to create a `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_ object by just passing a file name (i.e. `logger='mylog.log'`), creating the `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_ object externally then passing accordingly (i.e. `logger=<mylogger>`) is highly recommended.
+
+.. note::
+
+    Sorry for the long lines, I had to write like that because of a `bug <https://github.com/executablebooks/sphinx-copybutton/issues/65>`_ in `sphinx-copybutton` extension.
 
 
 

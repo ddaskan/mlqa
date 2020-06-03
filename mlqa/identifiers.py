@@ -25,6 +25,14 @@ class DiffChecker():
         log_info (bool): `True` if method calls or arguments also need to be
             logged
 
+    Notes:
+        Although `DiffChecker <identifiers.html#identifiers.DiffChecker>`_ is
+        able to create a `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_
+        object by just passing a file name (i.e. `logger='mylog.log'`), creating
+        the `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_
+        object externally then passing accordingly (i.e. `logger=<mylogger>`)
+        is highly recommended.
+
     Example:
         Basic usage:
 
