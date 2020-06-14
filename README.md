@@ -4,7 +4,7 @@ A Package to perform QA on data flows in Machine Learning.
 
 ## Introduction
 
-MLQA is a Python package that is created to help data scientists, analysts and developers to perform quality assurance (i.e. QA) on [pandas dataframes](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html) and 1d arrays, especially for machine learning modeling data flows. It's designed to work with [logging](https://docs.python.org/3/library/logging.html) library to log and notify QA steps in a descriptive way.
+MLQA is a Python package that is created to help data scientists, analysts and developers to perform quality assurance (i.e. QA) on [pandas dataframes](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html) and 1d arrays, especially for machine learning modeling data flows. It's designed to work with [logging](https://docs.python.org/3/library/logging.html) library to log and notify QA steps in a descriptive way. It includes stand alone functions (i.e. [checkers](mlqa/checkers.py)) for different QA activities and [DiffChecker](mlqa/identifiers.py) class for integrated QA capabilities on data.
 
 ## Installation
 
