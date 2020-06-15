@@ -6,21 +6,22 @@ Here, you can see some quick examples on how to utilize the package. For more de
 DiffChecker Basics
 ------------------
 
-`DiffChecker <identifiers.html#identifiers.DiffChecker>`_ is designed to perform QA in an integrated way on pd.DataFrame.
+`DiffChecker <identifiers.html#identifiers.DiffChecker>`_ is designed to perform QA on data flows for ML. You can easily save statistics from the origin data such as missing value rate, mean, min/max, percentile, outliers, etc., then to compare against the new data. This is especially important if you want to keep the prediction data under the same assumptions with the training data.
 
-You can easily initiate the object and fit a pd.DataFrame.
-
-.. code-block:: python
-
-	>>> from mlqa.identifiers import DiffChecker
-	>>> dc = DiffChecker()
-	>>> dc.fit(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*50+[1]*50}))
-
-Then, you can check on new data if it's okay for given criteria. Below, you can see data with increased NA count in column `na_col`. The default threshold is 0.5 which means it should be okay if NA rate is 50% more than the fitted data. NA rate is 50% in the fitted data so up to 75% (i.e. 50*(1+0.5)) should be okay. NA rate is 70% in the new data and, as expected, the QA passes. 
+Below is a quick example on how it works, just initiate and save statistics from the input data.
 
 .. code-block:: python
 
-	>>> dc.check(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*70+[1]*30}))
+    >>> from mlqa.identifiers import DiffChecker
+    >>> import pandas as pd
+    >>> dc = DiffChecker()
+    >>> dc.fit(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*50+[1]*50}))
+
+Then, you can check on new data if it's okay for given criteria. Below, you can see some data that is very similar in column `mean_col` but increased NA count in column `na_col`. The default threshold is 0.5 which means it should be okay if NA rate is 50% more than the origin data. NA rate is 50% in the origin data so up to 75% (i.e. 50*(1+0.5)) should be okay. NA rate is 70% in the new data and, as expected, the QA passes. 
+
+.. code-block:: python
+
+	>>> dc.check(pd.DataFrame({'mean_col':[.99, 2.1]*50, 'na_col':[None]*70+[1]*30}))
 	True
 
 If you think the `threshold <identifiers.html#identifiers.DiffChecker.threshold>`_ is too loose, you can adjust as you wish with `set_threshold <identifiers.html#identifiers.DiffChecker.set_threshold>`_ method. And, now the same returns `False` indicating the QA has failed.
@@ -28,7 +29,7 @@ If you think the `threshold <identifiers.html#identifiers.DiffChecker.threshold>
 .. code-block:: python
 
 	>>> dc.set_threshold(0.1)
-	>>> dc.check(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*70+[1]*30}))
+	>>> dc.check(pd.DataFrame({'mean_col':[.99, 2.1]*50, 'na_col':[None]*70+[1]*30}))
 	False
 
 DiffChecker Details
@@ -53,6 +54,8 @@ To be more precise, you can set both `threshold <identifiers.html#identifiers.Di
 
 .. code-block:: python
 
+    >>> import pandas as pd
+    >>> import numpy as np
     >>> dc = DiffChecker()
     >>> dc.set_threshold(0.2)
     >>> dc.set_stats(['mean', 'max', np.sum])
@@ -110,6 +113,7 @@ Just initiate the class with `logger='<your-logger-name>.log'` argument.
 .. code-block:: python
 
     >>> from mlqa.identifiers import DiffChecker
+    >>> import pandas as pd
     >>> dc = DiffChecker(logger='mylog.log')
     >>> dc.fit(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*50+[1]*50}))
     >>> dc.set_threshold(0.1)
@@ -124,6 +128,10 @@ If you open `mylog.log`, you'll see something like below.
 	WARNING|2020-05-31 15:56:48,147|na_rate value (i.e. 0.7) is not in the range of [0.45, 0.55] for na_col
 
 If you initiate the class with also `log_info=True` argument, then the other class steps (e.g. `set_threshold <identifiers.html#identifiers.DiffChecker.set_threshold>`_, `check <identifiers.html#identifiers.DiffChecker.check>`_) would be logged, too.
+
+.. note::
+
+    Although `DiffChecker <identifiers.html#identifiers.DiffChecker>`_ is able to create a `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_ object by just passing a file name (i.e. `logger='mylog.log'`), creating the `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_ object externally then passing accordingly (i.e. `logger=<mylogger>`) is highly recommended.
 
 Checkers with Logging
 ---------------------
@@ -198,7 +206,13 @@ This should log something like below.
 	WARNING|2020-05-31 18:21:20,019|Gender distribution looks wrong, check Weight for Gender=Male. Expected=0.5, Actual=0.6666666666666666
 	WARNING|2020-05-31 18:21:20,019|Gender distribution looks wrong, check Weight for Gender=Female. Expected=0.5, Actual=0.3333333333333333
 
-NOTE: sorry for the long lines, I had to write like that because of a `bug <https://github.com/executablebooks/sphinx-copybutton/issues/65>`_ in `sphinx-copybutton` extension.
+.. note::
+
+    Although `DiffChecker <identifiers.html#identifiers.DiffChecker>`_ is able to create a `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_ object by just passing a file name (i.e. `logger='mylog.log'`), creating the `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_ object externally then passing accordingly (i.e. `logger=<mylogger>`) is highly recommended.
+
+.. note::
+
+    Sorry for the long lines, I had to write like that because of a `bug <https://github.com/executablebooks/sphinx-copybutton/issues/65>`_ in `sphinx-copybutton` extension.
 
 
 

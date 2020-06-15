@@ -25,15 +25,23 @@ class DiffChecker():
         log_info (bool): `True` if method calls or arguments also need to be
             logged
 
+    Notes:
+        Although `DiffChecker <identifiers.html#identifiers.DiffChecker>`_ is
+        able to create a `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_
+        object by just passing a file name (i.e. `logger='mylog.log'`), creating
+        the `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_
+        object externally then passing accordingly (i.e. `logger=<mylogger>`)
+        is highly recommended.
+
     Example:
         Basic usage:
 
         >>> dc = DiffChecker()
         >>> dc.fit(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*50+[1]*50}))
-        >>> dc.check(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*70+[1]*30}))
+        >>> dc.check(pd.DataFrame({'mean_col':[.99, 2.1]*50, 'na_col':[None]*70+[1]*30}))
         True
         >>> dc.set_threshold(0.1)
-        >>> dc.check(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*70+[1]*30}))
+        >>> dc.check(pd.DataFrame({'mean_col':[.99, 2.1]*50, 'na_col':[None]*70+[1]*30}))
         False
 
         Quick set for `qa_level`:
