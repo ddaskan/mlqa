@@ -34,6 +34,7 @@ class TestDiffChecker(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        logging.shutdown()
         shutil.rmtree(cls.temp_dir)
 
     def test___init__(self):
