@@ -1,6 +1,6 @@
 # MLQA <img src="docs/_static/mlqa.png" align="right" width="120"/>
 
-A Package to perform QA on data flows in Machine Learning.
+A Package to perform QA on data flows for Machine Learning.
 
 ## Introduction
 
@@ -16,7 +16,9 @@ MLQA depends on Pandas and Numpy and works in Python 3.5+.
 
 ## Quickstart
 
-You can easily initiate the object and fit a pd.DataFrame.
+[DiffChecker](mlqa/identifiers.py) is designed to perform QA on data flows for ML. You can easily save statistics from the origin data such as missing value rate, mean, min/max, percentile, outliers, etc., then to compare against the new data. This is especially important if you want to keep the prediction data under the same assumptions with the training data.
+
+Below is a quick example on how it works, just initiate and save statistics from the input data.
 ```python
 >>> from mlqa.identifiers import DiffChecker
 >>> import pandas as pd

@@ -6,9 +6,9 @@ Here, you can see some quick examples on how to utilize the package. For more de
 DiffChecker Basics
 ------------------
 
-`DiffChecker <identifiers.html#identifiers.DiffChecker>`_ is designed to perform QA in an integrated way on pd.DataFrame.
+`DiffChecker <identifiers.html#identifiers.DiffChecker>`_ is designed to perform QA on data flows for ML. You can easily save statistics from the origin data such as missing value rate, mean, min/max, percentile, outliers, etc., then to compare against the new data. This is especially important if you want to keep the prediction data under the same assumptions with the training data.
 
-You can easily initiate the object and fit a pd.DataFrame.
+Below is a quick example on how it works, just initiate and save statistics from the input data.
 
 .. code-block:: python
 
@@ -17,7 +17,7 @@ You can easily initiate the object and fit a pd.DataFrame.
     >>> dc = DiffChecker()
     >>> dc.fit(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*50+[1]*50}))
 
-Then, you can check on new data if it's okay for given criteria. Below, you can see some data that is very similar in column `mean_col` but increased NA count in column `na_col`. The default threshold is 0.5 which means it should be okay if NA rate is 50% more than the fitted data. NA rate is 50% in the fitted data so up to 75% (i.e. 50*(1+0.5)) should be okay. NA rate is 70% in the new data and, as expected, the QA passes. 
+Then, you can check on new data if it's okay for given criteria. Below, you can see some data that is very similar in column `mean_col` but increased NA count in column `na_col`. The default threshold is 0.5 which means it should be okay if NA rate is 50% more than the origin data. NA rate is 50% in the origin data so up to 75% (i.e. 50*(1+0.5)) should be okay. NA rate is 70% in the new data and, as expected, the QA passes. 
 
 .. code-block:: python
 
