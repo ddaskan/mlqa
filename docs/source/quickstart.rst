@@ -153,7 +153,9 @@ Then, you can just pass `logger` attribute of the object when calling `checkers 
     >>> import numpy as np
     >>> import pandas as pd
     >>> np.random.seed(123)
-    >>> df = pd.DataFrame({'col1':np.random.normal(0, 0.1, 100), 'col2':np.random.normal(0, 1.0, 100)})
+    >>> df = pd.DataFrame({
+    ...     'col1':np.random.normal(0, 0.1, 100),
+    ...     'col2':np.random.normal(0, 1.0, 100)})
     >>> ch.qa_outliers(df, std=0.5, logger=dc.logger)
     False
 
@@ -195,8 +197,13 @@ For categorical values, you can check its distribution on a numeric column with 
 
 .. code-block:: python
 
-        >>> df1 = pd.DataFrame({'Gender': ['Male', 'Male', 'Female', 'Female'],'Weight': [200, 250, 100, 125]})
-        >>> ch.qa_category_distribution_on_value(df1, 'Gender', {'Male':.5, 'Female':.5}, 'Weight', logger=dc.logger)
+        >>> df1 = pd.DataFrame({'Gender': ['Male', 'Male', 'Female', 'Female'],
+        ...                     'Weight': [200, 250, 100, 125]})
+        >>> ch.qa_category_distribution_on_value(df1,
+        ...                                      'Gender',
+        ...                                      {'Male':.5, 'Female':.5},
+        ...                                      'Weight',
+        ...                                      logger=dc.logger)
         False
 
 This should log something like below.
@@ -209,11 +216,3 @@ This should log something like below.
 .. note::
 
     Although `DiffChecker <identifiers.html#identifiers.DiffChecker>`_ is able to create a `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_ object by just passing a file name (i.e. `logger='mylog.log'`), creating the `Logger <https://docs.python.org/3/library/logging.html#logging.Logger>`_ object externally then passing accordingly (i.e. `logger=<mylogger>`) is highly recommended.
-
-.. note::
-
-    Sorry for the long lines, I had to write like that because of a `bug <https://github.com/executablebooks/sphinx-copybutton/issues/65>`_ in `sphinx-copybutton` extension.
-
-
-
-
