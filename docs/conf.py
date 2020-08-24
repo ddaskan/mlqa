@@ -36,7 +36,6 @@ release = '0.1.0.post2'
 extensions = [
 	'sphinx.ext.autodoc',
 	'sphinxcontrib.napoleon',
-	#'sphinx.ext.viewcode',
 	'sphinx.ext.linkcode',
 	'sphinx_copybutton',
 ]
