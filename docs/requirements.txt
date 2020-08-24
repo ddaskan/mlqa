@@ -1,4 +1,3 @@
-mlqa
 sphinx==3.0.3 
 pydata-sphinx-theme==0.3.0
 sphinxcontrib-napoleon==0.7
