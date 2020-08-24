@@ -40,7 +40,7 @@ Then, you can check on new data if it's okay for given criteria. Below, you can 
 True
 ```
 
-See more examples at [Documentation/Quickstart](http://www.doganaskan.com/mlqa/source/quickstart.html). You can also read the full documentation [here](http://www.doganaskan.com/mlqa/).
+See more examples at [Documentation/Quickstart](https://mlqa.readthedocs.io/en/latest/source/quickstart.html). You can also read the full documentation [here](https://mlqa.readthedocs.io/).
 
 ## Tests
 Tests are written with [unittest](https://docs.python.org/3/library/unittest.html) and can be located in the [tests](tests/) folder. There are also some tests in docstring to be run by [doctest](https://docs.python.org/3/library/doctest.html).

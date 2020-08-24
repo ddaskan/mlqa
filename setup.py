@@ -18,7 +18,7 @@ setuptools.setup(
     download_url="https://pypi.python.org/pypi/mlqa",
     project_urls={
         "Bug Tracker": "https://github.com/ddaskan/mlqa/issues",
-        "Documentation": "http://www.doganaskan.com/mlqa/",
+        "Documentation": "https://mlqa.readthedocs.io/",
         "Source Code": "https://github.com/ddaskan/mlqa",
     },
     license='MIT',
