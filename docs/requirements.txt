@@ -1,3 +1,4 @@
+mlqa
 pydata-sphinx-theme
 sphinxcontrib-napoleon
 sphinx-copybutton
