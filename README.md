@@ -1,6 +1,7 @@
 # MLQA <img src="docs/_static/mlqa.png" align="right" width="120"/>
 
 [![PyPI](https://img.shields.io/pypi/v/mlqa)](https://pypi.org/project/mlqa/)
+[![Documentation Status](https://readthedocs.org/projects/mlqa/badge/?version=latest)](https://mlqa.readthedocs.io/en/latest/?badge=latest)
 [![PyPI - License](https://img.shields.io/pypi/l/mlqa)](https://github.com/ddaskan/mlqa/blob/master/LICENSE)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/mlqa)](https://pypi.org/project/mlqa/)
 [![GitHub last commit](https://img.shields.io/github/last-commit/ddaskan/mlqa)](https://github.com/ddaskan/mlqa)
