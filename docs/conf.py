@@ -76,6 +76,7 @@ html_context = {
     "github_repo": "mlqa",
     "github_version": "master",
     "doc_path": "docs",
+    'page_source_suffix': '.rst',
 }
 
 
