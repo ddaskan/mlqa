@@ -31,6 +31,7 @@ Below is a quick example on how it works, just initiate and save statistics from
 >>> import pandas as pd
 >>> dc = DiffChecker()
 >>> dc.fit(pd.DataFrame({'mean_col':[1, 2]*50, 'na_col':[None]*50+[1]*50}))
+
 ```
 
 Then, you can check on new data if it's okay for given criteria. Below, you can see some data that is very similar in column `mean_col` but increased NA count in column `na_col`. The default threshold is 0.5 which means it should be okay if NA rate is 50% more than the origin data. NA rate is 50% in the origin data so up to 75% (i.e. 50*(1+0.5)) should be okay. NA rate is 70% in the new data and, as expected, the QA passes.
@@ -38,6 +39,7 @@ Then, you can check on new data if it's okay for given criteria. Below, you can 
 ```python
 >>> dc.check(pd.DataFrame({'mean_col':[.99, 2.1]*50, 'na_col':[None]*70+[1]*30}))
 True
+
 ```
 
 See more examples at [Documentation/Quickstart](https://mlqa.readthedocs.io/en/latest/source/quickstart.html). You can also read the full documentation [here](https://mlqa.readthedocs.io/).
