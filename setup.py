@@ -8,7 +8,7 @@ with open('requirements.txt', 'r') as f:
 
 setuptools.setup(
     name="mlqa",
-    version="0.1.0.post2",
+    version="0.1.1",
     author="Dogan Askan",
     author_email="doganaskan@gmail.com",
     description="A Package to perform QA on data flows for Machine Learning.",
