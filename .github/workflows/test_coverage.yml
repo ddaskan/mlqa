@@ -5,6 +5,8 @@ name: tests
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron:  '0 */2 * * *'
   push:
     branches: [ master ]
   pull_request:
@@ -17,7 +19,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
