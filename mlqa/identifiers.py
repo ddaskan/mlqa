@@ -63,7 +63,6 @@ class DiffChecker():
         >>> dc.set_threshold(0.1)
         >>> dc.check(pd.DataFrame({'mean_col':[1, 1.5]*50, 'na_col':[None]*70+[1]*30}))
         False
-        >>> os.remove('mylog.log')
 
     '''
     stats = []
