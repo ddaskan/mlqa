@@ -1,4 +1,6 @@
-# MLQA <img src="docs/_static/mlqa.png" align="right" width="120"/>
+# MLQA 
+
+<img src="https://raw.githubusercontent.com/ddaskan/mlqa/master/docs/_static/mlqa.png" align="right" width="120"/>
 
 [![PyPI](https://img.shields.io/pypi/v/mlqa)](https://pypi.org/project/mlqa/)
 [![Documentation Status](https://readthedocs.org/projects/mlqa/badge/?version=latest)](https://mlqa.readthedocs.io/en/latest/?badge=latest)
@@ -48,4 +50,4 @@ See more examples at [Documentation/Quickstart](https://mlqa.readthedocs.io/en/l
 Tests are written with [unittest](https://docs.python.org/3/library/unittest.html) and can be located in the [tests](tests/) folder. There are also some tests in docstring to be run by [doctest](https://docs.python.org/3/library/doctest.html).
 
 ## License
-[MIT](LICENSE)
+[MIT](https://github.com/ddaskan/mlqa/blob/master/LICENSE)
