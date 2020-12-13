@@ -63,7 +63,6 @@ class DiffChecker():
         >>> dc.set_threshold(0.1)
         >>> dc.check(pd.DataFrame({'mean_col':[1, 1.5]*50, 'na_col':[None]*70+[1]*30}))
         False
-        >>> os.remove('mylog.log')
 
     '''
     stats = []
@@ -183,10 +182,10 @@ class DiffChecker():
                   col1  col2
             mean   0.2   0.1
             max    0.2   0.1
-            >>> dc.set_threshold({'col1':{'mean':0.1}}) # to set in column-stat level
+            >>> dc.set_threshold({'col1':{'mean':0.3}}) # to set in column-stat level
             >>> print(dc.threshold_df)
                   col1  col2
-            mean   0.1   0.1
+            mean   0.3   0.1
             max    0.2   0.1
 
         '''
@@ -254,7 +253,7 @@ class DiffChecker():
                     self.df_fit_stats.loc[stat_name, col] = df[col].agg(stat)
 
         self.threshold_df = self.df_fit_stats.copy()
-        self.threshold_df.replace(self.threshold_df, np.NaN, inplace=True)
+        self.threshold_df.loc[:, :] = np.NaN
 
     def check(self, df_to_check, columns=None, columns_to_exclude=None):
         '''Checks given `df_to_check` based on fitted `df` stats.

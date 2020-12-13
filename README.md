@@ -1,8 +1,11 @@
-# MLQA <img src="docs/_static/mlqa.png" align="right" width="120"/>
+# MLQA 
+
+<img src="https://raw.githubusercontent.com/ddaskan/mlqa/master/docs/_static/mlqa.png" align="right" width="120"/>
 
 [![PyPI](https://img.shields.io/pypi/v/mlqa)](https://pypi.org/project/mlqa/)
+[![tests](https://github.com/ddaskan/mlqa/workflows/tests/badge.svg)](https://github.com/ddaskan/mlqa/actions?query=workflow%3Atests)
+[![Codecov](https://codecov.io/gh/ddaskan/mlqa/master.svg)](https://codecov.io/gh/ddaskan/mlqa/)
 [![Documentation Status](https://readthedocs.org/projects/mlqa/badge/?version=latest)](https://mlqa.readthedocs.io/en/latest/?badge=latest)
-[![PyPI - License](https://img.shields.io/pypi/l/mlqa)](https://github.com/ddaskan/mlqa/blob/master/LICENSE)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/mlqa)](https://pypi.org/project/mlqa/)
 [![GitHub last commit](https://img.shields.io/github/last-commit/ddaskan/mlqa)](https://github.com/ddaskan/mlqa)
 [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fddaskan%2Fmlqa)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fddaskan%2Fmlqa)
@@ -19,7 +22,7 @@ You can install MLQA with pip.
 
 `pip install mlqa`
 
-MLQA depends on Pandas and Numpy and works in Python 3.5+.
+MLQA depends on Pandas and Numpy and works in Python 3.6+.
 
 ## Quickstart
 
@@ -48,4 +51,4 @@ See more examples at [Documentation/Quickstart](https://mlqa.readthedocs.io/en/l
 Tests are written with [unittest](https://docs.python.org/3/library/unittest.html) and can be located in the [tests](tests/) folder. There are also some tests in docstring to be run by [doctest](https://docs.python.org/3/library/doctest.html).
 
 ## License
-[MIT](LICENSE)
+[MIT](https://github.com/ddaskan/mlqa/blob/master/LICENSE)
