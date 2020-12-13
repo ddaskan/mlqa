@@ -239,7 +239,7 @@ class TestDiffChecker(unittest.TestCase):
             dcr.check(self.df1)
         self.assertRegex(
             log.output[0],
-            "^WARNING:test_mlqa:mean value \(i.e. 0.73\) is not in the (.*) "
+            "^WARNING:test_mlqa:mean value \\(i.e. 0.73\\) is not in the (.*) "
             "for Siblings/Spouses Aboard$")
         self.assertEqual(
             log.output[1],
