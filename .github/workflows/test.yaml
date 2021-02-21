@@ -1,10 +1,13 @@
-# This workflow will install Python dependencies, run tests and create a coverage report.
+# This workflow will install Python dependencies, run tests.
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: tests_and_coverage
+name: tests
 
 on:
-  push:
+  workflow_dispatch:
+  schedule:
+    - cron:  '7 10 * * 5'
+  pull_request:
     branches: [ master ]
 
 jobs:
@@ -40,10 +43,3 @@ jobs:
         path: junit/test-results-${{ matrix.os }}-py${{ matrix.python-version }}.xml
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        directory: ./
-        name: codecov-umbrella
-        fail_ci_if_error: true
-        path_to_write_report: ./codecov_report_${{ matrix.os }}_py${{ matrix.python-version }}.gz
