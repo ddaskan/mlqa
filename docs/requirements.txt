@@ -3,4 +3,4 @@ pydata-sphinx-theme==0.3.0
 sphinxcontrib-napoleon==0.7
 sphinx-copybutton==0.2.12
 numpy>=1.19.4
-Cython==0.29.21
+Cython==0.29.32
