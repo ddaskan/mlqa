@@ -48,4 +48,3 @@ jobs:
         name: codecov-umbrella
         fail_ci_if_error: false
         path_to_write_report: ./codecov_report_${{ matrix.os }}_py${{ matrix.python-version }}.gz
-        version: "v0.1.15"
