@@ -22,7 +22,7 @@ You can install MLQA with pip.
 
 `pip install mlqa`
 
-MLQA depends on Pandas and Numpy and works in Python 3.6+.
+MLQA depends on Pandas and Numpy and works in Python 3.7+.
 
 ## Quickstart
 
