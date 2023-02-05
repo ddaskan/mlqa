@@ -4,6 +4,7 @@
 name: tests_and_coverage
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
 
@@ -47,3 +48,4 @@ jobs:
         name: codecov-umbrella
         fail_ci_if_error: true
         path_to_write_report: ./codecov_report_${{ matrix.os }}_py${{ matrix.python-version }}.gz
+        version: "v0.1.15"
